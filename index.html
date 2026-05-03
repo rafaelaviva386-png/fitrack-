@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard Financeiro — Investimentos & Bancos 2025">
+  <title>Dashboard Financeiro — Investimentos & Bancos 2025</title>
+</head>
+<body>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, .dash { font-family: 'Segoe UI', system-ui, sans-serif; }
+  .dash { background: #f3f2f1; min-height: 100vh; padding: 0; }
+  .topbar { background: #1a1a2e; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 48px; }
+  .topbar-title { font-size: 15px; font-weight: 600; letter-spacing: .3px; display: flex; align-items: center; gap: 8px; }
+  .topbar-title .dot { width: 10px; height: 10px; border-radius: 50%; background: #f2c811; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; font-size: 12px; color: #b0b0c3; }
+  .topbar-right .tag { background: #252545; padding: 3px 10px; border-radius: 12px; font-size: 11px; color: #f2c811; }
+  .nav { background: #252545; display: flex; align-items: center; gap: 2px; padding: 0 20px; height: 38px; }
+  .nav-btn { color: #b0b0c3; font-size: 12px; padding: 4px 14px; border-radius: 4px; cursor: pointer; background: none; border: none; font-family: inherit; transition: background .15s, color .15s; }
+  .nav-btn.active { background: #117bca; color: #fff; font-weight: 600; }
+  .nav-btn:hover:not(.active) { background: #333360; color: #fff; }
+  .content { padding: 16px 18px; }
+  .filters { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .filter-chip { font-size: 12px; padding: 4px 12px; border-radius: 12px; border: 1px solid #c8c6c4; background: #fff; cursor: pointer; color: #323130; font-family: inherit; transition: all .15s; }
+  .filter-chip.active { background: #117bca; color: #fff; border-color: #117bca; font-weight: 600; }
+  .filter-chip:hover:not(.active) { background: #edebe9; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .kpi { background: #fff; border-radius: 4px; padding: 14px 16px; border-left: 4px solid #117bca; position: relative; }
+  .kpi.green { border-left-color: #107c10; }
+  .kpi.amber { border-left-color: #d83b01; }
+  .kpi.purple { border-left-color: #8764b8; }
+  .kpi-label { font-size: 11px; color: #605e5c; text-transform: uppercase; letter-spacing: .4px; font-weight: 600; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+  .kpi-delta { font-size: 11px; margin-top: 4px; font-weight: 600; }
+  .kpi-delta.up { color: #107c10; }
+  .kpi-delta.down { color: #d83b01; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .card { background: #fff; border-radius: 4px; padding: 14px 16px; }
+  .card-title { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid #edebe9; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .card-title .badge { font-size: 10px; background: #e1effa; color: #0078d4; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .chart-wrap { position: relative; width: 100%; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .bar-name { font-size: 12px; color: #323130; width: 90px; text-align: right; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; height: 18px; background: #f3f2f1; border-radius: 2px; position: relative; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+  .bar-val { font-size: 11px; color: #605e5c; width: 48px; font-weight: 600; flex-shrink: 0; }
+  .rank { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f2f1; }
+  .rank:last-child { border-bottom: none; }
+  .rank-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .rank-num.gold { background: #fff4ce; color: #835b00; }
+  .rank-num.silver { background: #e8e8e8; color: #3b3b3b; }
+  .rank-num.bronze { background: #f9dcc3; color: #8a3b00; }
+  .rank-num.other { background: #f3f2f1; color: #605e5c; }
+  .rank-info { flex: 1; }
+  .rank-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .rank-sub { font-size: 11px; color: #605e5c; }
+  .rank-score { font-size: 14px; font-weight: 700; }
+  .rank-score.up { color: #107c10; }
+  .rank-score.down { color: #d83b01; }
+  .score-bar { height: 4px; background: #f3f2f1; border-radius: 2px; margin-top: 4px; }
+  .score-fill { height: 100%; border-radius: 2px; }
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #605e5c; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .footer-bar { background: #252545; color: #b0b0c3; font-size: 11px; padding: 6px 20px; display: flex; justify-content: space-between; }
+</style>
+
+<div class="dash">
+  <div class="topbar">
+    <div class="topbar-title"><span class="dot"></span> Dashboard Financeiro — Investimentos & Bancos 2025</div>
+    <div class="topbar-right">
+      <span>Atualizado: Mai 2025</span>
+      <span class="tag">Ao vivo</span>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active">Visão Geral</button>
+    <button class="nav-btn">Renda Fixa</button>
+    <button class="nav-btn">Renda Variável</button>
+    <button class="nav-btn">Bancos</button>
+    <button class="nav-btn">Comparativo</button>
+  </div>
+
+  <div class="content">
+    <div class="filters">
+      <span class="filter-label">Período:</span>
+      <button class="filter-chip active" onclick="setFilter(this)">12 meses</button>
+      <button class="filter-chip" onclick="setFilter(this)">6 meses</button>
+      <button class="filter-chip" onclick="setFilter(this)">3 meses</button>
+      <button class="filter-chip" onclick="setFilter(this)">YTD</button>
+      <span class="filter-label" style="margin-left:12px;">Perfil:</span>
+      <button class="filter-chip active" onclick="setFilter(this)">Todos</button>
+      <button class="filter-chip" onclick="setFilter(this)">Conservador</button>
+      <button class="filter-chip" onclick="setFilter(this)">Moderado</button>
+      <button class="filter-chip" onclick="setFilter(this)">Arrojado</button>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">Selic (a.a.)</div>
+        <div class="kpi-value">13,75%</div>
+        <div class="kpi-delta up">▲ +0,25pp vs. mês anterior</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">CDI Acum. 12m</div>
+        <div class="kpi-value">13,65%</div>
+        <div class="kpi-delta up">▲ Melhor desde 2017</div>
+      </div>
+      <div class="kpi amber">
+        <div class="kpi-label">IPCA 12m</div>
+        <div class="kpi-value">4,82%</div>
+        <div class="kpi-delta down">▼ -0,31pp vs. estimativa</div>
+      </div>
+      <div class="kpi purple">
+        <div class="kpi-label">Ibovespa YTD</div>
+        <div class="kpi-value">+8,4%</div>
+        <div class="kpi-delta up">▲ Acima da média hist.</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Melhores Investimentos — Rentabilidade 12m <span class="badge">% a.a.</span></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Renda Fixa</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>Renda Variável</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Fundos</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>Alternativo</span>
+        </div>
+        <div id="invest-bars"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ranking Melhores Bancos <span class="badge">Nota /10</span></div>
+        <div id="bank-rank"></div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Evolução Rentabilidade (Jan–Mai 2025) <span class="badge">Mensal %</span></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Tesouro IPCA+</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>CDB 115% CDI</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>FII Médio</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Ibovespa</span>
+        </div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="lineChart" role="img" aria-label="Linha de rentabilidade mensal jan a mai 2025 para 4 categorias de investimento">Rentabilidade mensal comparativa.</canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Alocação Ideal Moderado <span class="badge">%</span></div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="pieChart" role="img" aria-label="Gráfico de pizza com alocação ideal para perfil moderado">Renda Fixa 45%, Ações 25%, FIIs 20%, Exterior 10%.</canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Comparativo Bancos — Indicadores Digitais & Taxa <span class="badge">Score composto</span></div>
+      <div class="chart-wrap" style="height:200px;"><canvas id="radarChart" role="img" aria-label="Radar comparativo de 5 bancos em 5 critérios">Comparativo radar de bancos digitais e tradicionais.</canvas></div>
+    </div>
+  </div>
+
+    <!-- ── SEÇÃO CÂMBIO ── -->
+    <div style="margin-top:10px;">
+
+      <!-- Título de seção estilo Power BI -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="width:4px;height:22px;background:#f2c811;border-radius:2px;"></div>
+        <span style="font-size:13px;font-weight:700;color:#1a1a2e;text-transform:uppercase;letter-spacing:.5px;">Câmbio — Dólar &amp; Euro vs Real</span>
+        <span style="font-size:10px;background:#fff4ce;color:#835b00;padding:2px 9px;border-radius:10px;font-weight:700;">Histórico Jan–Mai 2025</span>
+      </div>
+
+      <!-- KPIs Câmbio -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
+        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #0e7a8a;">
+          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Dólar Hoje</div>
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 5,72</div>
+          <div style="font-size:11px;font-weight:600;color:#d83b01;margin-top:4px;">▲ +R$0,08 no dia</div>
+        </div>
+        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #8764b8;">
+          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Euro Hoje</div>
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 6,18</div>
+          <div style="font-size:11px;font-weight:600;color:#107c10;margin-top:4px;">▼ -R$0,04 no dia</div>
+        </div>
+        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #d83b01;">
+          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Máx USD 2025</div>
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 6,31</div>
+          <div style="font-size:11px;font-weight:600;color:#605e5c;margin-top:4px;">Atingido em Abr/2025</div>
+        </div>
+        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #107c10;">
+          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Mín USD 2025</div>
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 5,41</div>
+          <div style="font-size:11px;font-weight:600;color:#605e5c;margin-top:4px;">Atingido em Jan/2025</div>
+        </div>
+      </div>
+
+      <!-- Gráficos lado a lado -->
+      <div class="grid-2">
+
+        <!-- Gráfico Dólar -->
+        <div class="card">
+          <div class="card-title">
+            Dólar Americano — USD/BRL
+            <span class="badge" style="background:#e0f4f6;color:#0e7a8a;">R$ por dólar</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>USD/BRL</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
+          </div>
+          <div class="chart-wrap" style="height:220px;">
+            <canvas id="usdChart" role="img" aria-label="Cotação dólar USD/BRL janeiro a maio 2025">Cotação do dólar frente ao real em 2025.</canvas>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <div style="flex:1;background:#f3f2f1;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#605e5c;font-weight:700;text-transform:uppercase;">Abertura Jan</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a2e;">R$ 5,65</div>
+            </div>
+            <div style="flex:1;background:#fde7d7;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#d83b01;font-weight:700;text-transform:uppercase;">Máxima</div>
+              <div style="font-size:14px;font-weight:700;color:#d83b01;">R$ 6,31</div>
+            </div>
+            <div style="flex:1;background:#dff6dd;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#107c10;font-weight:700;text-transform:uppercase;">Mínima</div>
+              <div style="font-size:14px;font-weight:700;color:#107c10;">R$ 5,41</div>
+            </div>
+            <div style="flex:1;background:#e0f4f6;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#0e7a8a;font-weight:700;text-transform:uppercase;">Atual</div>
+              <div style="font-size:14px;font-weight:700;color:#0e7a8a;">R$ 5,72</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico Euro -->
+        <div class="card">
+          <div class="card-title">
+            Euro — EUR/BRL
+            <span class="badge" style="background:#ede8f8;color:#8764b8;">R$ por euro</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>EUR/BRL</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
+          </div>
+          <div class="chart-wrap" style="height:220px;">
+            <canvas id="eurChart" role="img" aria-label="Cotação euro EUR/BRL janeiro a maio 2025">Cotação do euro frente ao real em 2025.</canvas>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <div style="flex:1;background:#f3f2f1;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#605e5c;font-weight:700;text-transform:uppercase;">Abertura Jan</div>
+              <div style="font-size:14px;font-weight:700;color:#1a1a2e;">R$ 6,05</div>
+            </div>
+            <div style="flex:1;background:#fde7d7;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#d83b01;font-weight:700;text-transform:uppercase;">Máxima</div>
+              <div style="font-size:14px;font-weight:700;color:#d83b01;">R$ 6,87</div>
+            </div>
+            <div style="flex:1;background:#dff6dd;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#107c10;font-weight:700;text-transform:uppercase;">Mínima</div>
+              <div style="font-size:14px;font-weight:700;color:#107c10;">R$ 5,88</div>
+            </div>
+            <div style="flex:1;background:#ede8f8;border-radius:4px;padding:7px 10px;text-align:center;">
+              <div style="font-size:10px;color:#8764b8;font-weight:700;text-transform:uppercase;">Atual</div>
+              <div style="font-size:14px;font-weight:700;color:#8764b8;">R$ 6,18</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Gráfico comparativo USD vs EUR -->
+      <div class="card" style="margin-top:10px;">
+        <div class="card-title">
+          USD vs EUR — Comparativo de Cotação (Jan–Mai 2025)
+          <span class="badge">Duplo eixo Y</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>Dólar USD/BRL (eixo esq.)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Euro EUR/BRL (eixo dir.)</span>
+        </div>
+        <div class="chart-wrap" style="height:200px;">
+          <canvas id="cambioCompChart" role="img" aria-label="Comparativo USD e EUR vs BRL com dois eixos">Comparativo câmbio dólar e euro.</canvas>
+        </div>
+      </div>
+
+    </div>
+    <!-- ── FIM SEÇÃO CÂMBIO ── -->
+
+  <div class="footer-bar">
+    <span>Fonte: Banco Central, B3, ANBIMA — Dados simulados para fins ilustrativos</span>
+    <span>Dashboard Financeiro v2.1 · Maio 2025</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function setFilter(el) {
+  const group = el.parentElement.querySelectorAll('.filter-chip');
+  const labels = ['12 meses','6 meses','3 meses','YTD'];
+  const isTime = labels.includes(el.textContent);
+  group.forEach(b => { if(labels.includes(b.textContent) === isTime) b.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+const investments = [
+  { name: 'CDB 115% CDI', val: 15.7, color: '#117bca', pct: 95 },
+  { name: 'LCI/LCA 100% CDI', val: 13.7, color: '#117bca', pct: 83 },
+  { name: 'Tesouro IPCA+', val: 12.4, color: '#117bca', pct: 75 },
+  { name: 'Ibovespa ETF', val: 18.3, color: '#107c10', pct: 100 },
+  { name: 'FII (IFIX)', val: 14.2, color: '#107c10', pct: 86 },
+  { name: 'Ações Dividendos', val: 16.8, color: '#107c10', pct: 92 },
+  { name: 'Multimercado Top', val: 15.1, color: '#8764b8', pct: 90 },
+  { name: 'BTC/Crypto', val: 28.4, color: '#d83b01', pct: 100 },
+];
+
+const bars = document.getElementById('invest-bars');
+investments.forEach(d => {
+  bars.innerHTML += `<div class="bar-row">
+    <span class="bar-name" title="${d.name}">${d.name}</span>
+    <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+    <span class="bar-val">${d.val.toFixed(1)}%</span>
+  </div>`;
+});
+
+const banks = [
+  { name: 'Nubank', sub: 'Digital · Neobank', score: 9.4, delta: '+0.2', color: '#8764b8', up: true },
+  { name: 'Inter', sub: 'Digital · Banco', score: 9.1, delta: '+0.1', color: '#d83b01', up: true },
+  { name: 'XP Investimentos', sub: 'Corretora', score: 9.0, delta: '=', color: '#117bca', up: true },
+  { name: 'Itaú Unibanco', sub: 'Tradicional', score: 8.6, delta: '-0.1', color: '#117bca', up: false },
+  { name: 'BTG Pactual', sub: 'Digital · Premium', score: 8.8, delta: '+0.3', color: '#107c10', up: true },
+  { name: 'Bradesco', sub: 'Tradicional', score: 8.1, delta: '=', color: '#605e5c', up: true },
+];
+const numClasses = ['gold','silver','bronze','other','other','other'];
+const br = document.getElementById('bank-rank');
+banks.forEach((b,i) => {
+  const pct = Math.round((b.score/10)*100);
+  br.innerHTML += `<div class="rank">
+    <span class="rank-num ${numClasses[i]}">${i+1}</span>
+    <div class="rank-info">
+      <div class="rank-name">${b.name}</div>
+      <div class="rank-sub">${b.sub}</div>
+      <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${b.color}"></div></div>
+    </div>
+    <span class="rank-score ${b.up?'up':'down'}">${b.score} <span style="font-size:10px;font-weight:400">${b.delta}</span></span>
+  </div>`;
+});
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Fev','Mar','Abr','Mai'],
+    datasets: [
+      { label: 'Tesouro IPCA+', data: [1.1,1.05,0.9,1.2,1.15], borderColor: '#117bca', backgroundColor: 'rgba(17,123,202,0.08)', tension: 0.4, pointRadius: 4, fill: true },
+      { label: 'CDB 115% CDI', data: [1.25,1.2,1.3,1.2,1.28], borderColor: '#107c10', backgroundColor: 'rgba(16,124,16,0.07)', tension: 0.4, pointRadius: 4, fill: true, borderDash: [4,2] },
+      { label: 'FII Médio', data: [0.9,1.1,0.85,1.0,1.05], borderColor: '#d83b01', backgroundColor: 'rgba(216,59,1,0.06)', tension: 0.4, pointRadius: 4, fill: false, borderDash: [6,3] },
+      { label: 'Ibovespa', data: [2.1,-0.8,1.5,3.2,1.4], borderColor: '#8764b8', backgroundColor: 'rgba(135,100,184,0.07)', tension: 0.4, pointRadius: 4, fill: false },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+      y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => v.toFixed(1)+'%' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Renda Fixa','Ações','FIIs','Exterior'],
+    datasets: [{ data: [45,25,20,10], backgroundColor: ['#117bca','#107c10','#d83b01','#8764b8'], borderWidth: 2, borderColor: '#fff', hoverOffset: 6 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label+': '+ctx.parsed+'%' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Rentabilidade','App/UX','Suporte','Taxas','Produtos'],
+    datasets: [
+      { label: 'Nubank', data: [8,9.8,8.5,9.5,8], borderColor: '#8764b8', backgroundColor: 'rgba(135,100,184,0.1)', pointRadius: 3 },
+      { label: 'Inter', data: [8.5,9.2,8,9,9], borderColor: '#d83b01', backgroundColor: 'rgba(216,59,1,0.1)', pointRadius: 3 },
+      { label: 'XP', data: [9.5,8.5,8.5,7,9.5], borderColor: '#117bca', backgroundColor: 'rgba(17,123,202,0.1)', pointRadius: 3 },
+      { label: 'Itaú', data: [8,7.5,8,6.5,9], borderColor: '#605e5c', backgroundColor: 'rgba(96,94,92,0.08)', pointRadius: 3 },
+      { label: 'BTG', data: [9.2,8.8,8.2,8.5,9.5], borderColor: '#107c10', backgroundColor: 'rgba(16,124,16,0.08)', pointRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 10, padding: 12 } } },
+    scales: { r: { min: 5, max: 10, ticks: { stepSize: 1, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.08)' } } }
+  }
+});
+
+// ─── USD CHART ───
+const meses = ['Jan','Fev','Mar','Abr','Mai'];
+const usdVals = [5.65, 5.80, 6.10, 6.31, 5.72];
+new Chart(document.getElementById('usdChart'), {
+  type: 'line',
+  data: {
+    labels: meses,
+    datasets: [{
+      label: 'USD/BRL',
+      data: usdVals,
+      borderColor: '#0e7a8a',
+      backgroundColor: 'rgba(14,122,138,0.10)',
+      tension: 0.4,
+      fill: true,
+      borderWidth: 2.5,
+      pointBackgroundColor: usdVals.map(v => v === Math.max(...usdVals) ? '#d83b01' : v === Math.min(...usdVals) ? '#107c10' : '#0e7a8a'),
+      pointRadius: usdVals.map(v => (v === Math.max(...usdVals) || v === Math.min(...usdVals)) ? 8 : 5),
+      pointHoverRadius: 8,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' USD/BRL: R$ ' + ctx.parsed.y.toFixed(2) } } },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+      y: { min: 5.3, max: 6.5, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => 'R$' + v.toFixed(2) } }
+    }
+  }
+});
+
+// ─── EUR CHART ───
+const eurVals = [6.05, 6.22, 6.55, 6.87, 6.18];
+new Chart(document.getElementById('eurChart'), {
+  type: 'line',
+  data: {
+    labels: meses,
+    datasets: [{
+      label: 'EUR/BRL',
+      data: eurVals,
+      borderColor: '#8764b8',
+      backgroundColor: 'rgba(135,100,184,0.10)',
+      tension: 0.4,
+      fill: true,
+      borderWidth: 2.5,
+      pointBackgroundColor: eurVals.map(v => v === Math.max(...eurVals) ? '#d83b01' : v === Math.min(...eurVals) ? '#107c10' : '#8764b8'),
+      pointRadius: eurVals.map(v => (v === Math.max(...eurVals) || v === Math.min(...eurVals)) ? 8 : 5),
+      pointHoverRadius: 8,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' EUR/BRL: R$ ' + ctx.parsed.y.toFixed(2) } } },
+    scales: {
+      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+      y: { min: 5.7, max: 7.1, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => 'R$' + v.toFixed(2) } }
+    }
+  }
+});
+
+// ─── COMPARATIVO USD vs EUR ───
+new Chart(document.getElementById('cambioCompChart'), {
+  type: 'bar',
+  data: {
+    labels: meses,
+    datasets: [
+      { label: 'USD/BRL', data: usdVals, backgroundColor: 'rgba(14,122,138,0.75)', borderColor: '#0e7a8a', borderWidth: 1.5, borderRadius: 3, yAxisID: 'yUsd' },
+      { label: 'EUR/BRL', data: eurVals, backgroundColor: 'rgba(135,100,184,0.75)', borderColor: '#8764b8', borderWidth: 1.5, borderRadius: 3, yAxisID: 'yEur' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': R$ ' + ctx.parsed.y.toFixed(2) } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      yUsd: { position: 'left',  min: 5.3, max: 6.5, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, color: '#0e7a8a', callback: v => 'R$' + v.toFixed(2) } },
+      yEur: { position: 'right', min: 5.7, max: 7.1, grid: { drawOnChartArea: false }, ticks: { font: { size: 11 }, color: '#8764b8', callback: v => 'R$' + v.toFixed(2) } },
+    }
+  }
+});
+</script>
+</body>
+</html>
