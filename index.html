@@ -8,6 +8,40 @@
 </head>
 <body>
 
+<!-- TELA DE LOGIN -->
+<div id="loginScreen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#1a1a2e;font-family:'Segoe UI',system-ui,sans-serif;">
+  <div style="background:#252545;border-radius:8px;padding:40px 36px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.4);text-align:center;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
+      <div style="width:12px;height:12px;border-radius:50%;background:#f2c811;"></div>
+      <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.3px;">Dashboard Financeiro</span>
+    </div>
+    <p style="color:#b0b0c3;font-size:12px;margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px;">Acesso Restrito</p>
+    <input id="senhaInput" type="password" placeholder="Digite a senha"
+      style="width:100%;padding:10px 14px;border-radius:4px;border:1px solid #3a3a60;background:#1a1a2e;color:#fff;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:12px;"
+      onkeydown="if(event.key==='Enter')verificarSenha()">
+    <div id="loginErro" style="color:#d83b01;font-size:12px;margin-bottom:10px;min-height:16px;"></div>
+    <button onclick="verificarSenha()"
+      style="width:100%;padding:10px;background:#117bca;color:#fff;border:none;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">
+      Entrar
+    </button>
+  </div>
+</div>
+
+<div id="dashContent" style="display:none;">
+<script>
+function verificarSenha() {
+  const senha = document.getElementById('senhaInput').value;
+  if (senha === '1329nadine') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashContent').style.display = 'block';
+  } else {
+    document.getElementById('loginErro').textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('senhaInput').value = '';
+    document.getElementById('senhaInput').focus();
+  }
+}
+</script>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -489,5 +523,6 @@ new Chart(document.getElementById('cambioCompChart'), {
   }
 });
 </script>
+</div><!-- fim dashContent -->
 </body>
 </html>
