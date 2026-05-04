@@ -1,88 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dashboard Financeiro — Investimentos & Bancos 2025">
-  <title>Dashboard Financeiro — Investimentos & Bancos 2025</title>
-</head>
-<body>
-
-<!-- TELA DE LOGIN -->
-<div id="loginScreen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#1a1a2e;font-family:'Segoe UI',system-ui,sans-serif;">
-  <div style="background:#252545;border-radius:8px;padding:40px 36px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.4);text-align:center;">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;">
-      <div style="width:12px;height:12px;border-radius:50%;background:#f2c811;"></div>
-      <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.3px;">Dashboard Financeiro</span>
-    </div>
-    <p style="color:#b0b0c3;font-size:12px;margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px;">Acesso Restrito</p>
-    <input id="senhaInput" type="password" placeholder="Digite a senha"
-      style="width:100%;padding:10px 14px;border-radius:4px;border:1px solid #3a3a60;background:#1a1a2e;color:#fff;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:12px;"
-      onkeydown="if(event.key==='Enter')verificarSenha()">
-    <div id="loginErro" style="color:#d83b01;font-size:12px;margin-bottom:10px;min-height:16px;"></div>
-    <button onclick="verificarSenha()"
-      style="width:100%;padding:10px;background:#117bca;color:#fff;border:none;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">
-      Entrar
-    </button>
-  </div>
-</div>
-
-<div id="dashContent" style="display:none;">
-<script>
-function verificarSenha() {
-  const senha = document.getElementById('senhaInput').value;
-  if (senha === '1329nadine') {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashContent').style.display = 'block';
-  } else {
-    document.getElementById('loginErro').textContent = 'Senha incorreta. Tente novamente.';
-    document.getElementById('senhaInput').value = '';
-    document.getElementById('senhaInput').focus();
-  }
-}
-</script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Financeiro 2025</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body, .dash { font-family: 'Segoe UI', system-ui, sans-serif; }
   .dash { background: #f3f2f1; min-height: 100vh; padding: 0; }
+ 
+  /* ── TOPBAR ── */
   .topbar { background: #1a1a2e; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 48px; }
   .topbar-title { font-size: 15px; font-weight: 600; letter-spacing: .3px; display: flex; align-items: center; gap: 8px; }
   .topbar-title .dot { width: 10px; height: 10px; border-radius: 50%; background: #f2c811; }
   .topbar-right { display: flex; align-items: center; gap: 16px; font-size: 12px; color: #b0b0c3; }
   .topbar-right .tag { background: #252545; padding: 3px 10px; border-radius: 12px; font-size: 11px; color: #f2c811; }
+ 
+  /* ── NAV ── */
   .nav { background: #252545; display: flex; align-items: center; gap: 2px; padding: 0 20px; height: 38px; }
   .nav-btn { color: #b0b0c3; font-size: 12px; padding: 4px 14px; border-radius: 4px; cursor: pointer; background: none; border: none; font-family: inherit; transition: background .15s, color .15s; }
   .nav-btn.active { background: #117bca; color: #fff; font-weight: 600; }
   .nav-btn:hover:not(.active) { background: #333360; color: #fff; }
+ 
+  /* ── TABS ── */
+  .tab-page { display: none; }
+  .tab-page.active { display: block; }
+ 
+  /* ── CONTENT ── */
   .content { padding: 16px 18px; }
   .filters { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
   .filter-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
   .filter-chip { font-size: 12px; padding: 4px 12px; border-radius: 12px; border: 1px solid #c8c6c4; background: #fff; cursor: pointer; color: #323130; font-family: inherit; transition: all .15s; }
   .filter-chip.active { background: #117bca; color: #fff; border-color: #117bca; font-weight: 600; }
   .filter-chip:hover:not(.active) { background: #edebe9; }
+ 
+  /* ── KPIs ── */
   .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
   .kpi { background: #fff; border-radius: 4px; padding: 14px 16px; border-left: 4px solid #117bca; position: relative; }
   .kpi.green { border-left-color: #107c10; }
   .kpi.amber { border-left-color: #d83b01; }
   .kpi.purple { border-left-color: #8764b8; }
+  .kpi.teal  { border-left-color: #0e7a8a; }
   .kpi-label { font-size: 11px; color: #605e5c; text-transform: uppercase; letter-spacing: .4px; font-weight: 600; margin-bottom: 6px; }
   .kpi-value { font-size: 22px; font-weight: 700; color: #1a1a2e; }
   .kpi-delta { font-size: 11px; margin-top: 4px; font-weight: 600; }
   .kpi-delta.up { color: #107c10; }
   .kpi-delta.down { color: #d83b01; }
+  .kpi-delta.neu { color: #605e5c; }
+ 
+  /* ── GRIDS ── */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
   .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px; }
+ 
+  /* ── CARDS ── */
   .card { background: #fff; border-radius: 4px; padding: 14px 16px; }
-  .card-title { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid #edebe9; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .card-title { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid #edebe9; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
   .card-title .badge { font-size: 10px; background: #e1effa; color: #0078d4; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+  .card-title .badge.green { background: #dff6dd; color: #107c10; }
+  .card-title .badge.amber { background: #fff4ce; color: #835b00; }
+  .card-title .badge.purple { background: #ede8f8; color: #8764b8; }
+ 
+  /* ── CHARTS ── */
   .chart-wrap { position: relative; width: 100%; }
   .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
   .bar-name { font-size: 12px; color: #323130; width: 90px; text-align: right; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bar-track { flex: 1; height: 18px; background: #f3f2f1; border-radius: 2px; position: relative; }
   .bar-fill { height: 100%; border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1); }
   .bar-val { font-size: 11px; color: #605e5c; width: 48px; font-weight: 600; flex-shrink: 0; }
+ 
+  /* ── RANK ── */
   .rank { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f2f1; }
   .rank:last-child { border-bottom: none; }
   .rank-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
@@ -98,249 +85,803 @@ function verificarSenha() {
   .rank-score.down { color: #d83b01; }
   .score-bar { height: 4px; background: #f3f2f1; border-radius: 2px; margin-top: 4px; }
   .score-fill { height: 100%; border-radius: 2px; }
+ 
+  /* ── LEGEND ── */
   .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
   .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #605e5c; }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .footer-bar { background: #252545; color: #b0b0c3; font-size: 11px; padding: 6px 20px; display: flex; justify-content: space-between; }
+ 
+  /* ── SECTION HEADER ── */
+  .sec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; margin-top: 4px; }
+  .sec-bar { width: 4px; height: 22px; background: #f2c811; border-radius: 2px; flex-shrink: 0; }
+  .sec-title { font-size: 13px; font-weight: 700; color: #1a1a2e; text-transform: uppercase; letter-spacing: .5px; }
+  .sec-badge { font-size: 10px; background: #fff4ce; color: #835b00; padding: 2px 9px; border-radius: 10px; font-weight: 700; }
+ 
+  /* ── AÇÕES — TABELA ── */
+  .table-acoes { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .table-acoes th { font-size: 11px; color: #605e5c; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; padding: 5px 8px; border-bottom: 1px solid #edebe9; text-align: left; background: #f9f8f7; white-space: nowrap; }
+  .table-acoes td { padding: 7px 8px; border-bottom: 1px solid #f3f2f1; color: #323130; vertical-align: middle; }
+  .table-acoes tr:last-child td { border-bottom: none; }
+  .table-acoes tr:hover td { background: #f9f8f7; }
+  .tick { display: inline-block; background: #117bca; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; letter-spacing: .5px; min-width: 54px; text-align: center; }
+  .pill-up { background: #dff6dd; color: #107c10; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .pill-dn { background: #fde7d7; color: #d83b01; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .pill-neu { background: #f3f2f1; color: #605e5c; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .tag-setor { font-size: 10px; padding: 2px 7px; border-radius: 3px; font-weight: 600; white-space: nowrap; }
+  .s-fin { background: #e1effa; color: #0078d4; }
+  .s-ene { background: #fff4ce; color: #835b00; }
+  .s-con { background: #dff6dd; color: #107c10; }
+  .s-tec { background: #ede8f8; color: #8764b8; }
+  .s-util { background: #f9dcc3; color: #8a3b00; }
+  .s-saude { background: #fde7d7; color: #d83b01; }
+  .s-mat { background: #e8e8e8; color: #3b3b3b; }
+ 
+  /* ── AÇÕES — FORM ── */
+  .add-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; background: #fff; border-radius: 4px; padding: 14px 16px; border: 2px dashed #117bca; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-label { font-size: 10px; color: #605e5c; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+  .form-input { font-size: 13px; padding: 6px 10px; border: 1px solid #c8c6c4; border-radius: 3px; font-family: inherit; color: #1a1a2e; background: #fff; outline: none; transition: border .15s; }
+  .form-input:focus { border-color: #117bca; }
+  select.form-input { cursor: pointer; }
+  .add-btn { background: #117bca; color: #fff; border: none; border-radius: 3px; padding: 7px 16px; font-size: 12px; font-family: inherit; cursor: pointer; font-weight: 700; height: 34px; transition: background .15s; letter-spacing: .3px; white-space: nowrap; }
+  .add-btn:hover { background: #0e6aaa; }
+  .delbtn { background: none; border: 1px solid #d83b01; color: #d83b01; border-radius: 3px; padding: 4px 8px; font-size: 11px; font-family: inherit; cursor: pointer; font-weight: 600; transition: all .15s; }
+  .delbtn:hover { background: #d83b01; color: #fff; }
+  .msg-ok { color: #107c10; font-size: 11px; font-weight: 600; padding: 0 4px; display: none; }
+  .msg-err { color: #d83b01; font-size: 11px; font-weight: 600; padding: 0 4px; display: none; }
+  .empty-msg { text-align: center; color: #a19f9d; font-size: 12px; padding: 24px 0; font-style: italic; }
+ 
+  /* ── FOOTER ── */
+  .footer-bar { background: #252545; color: #b0b0c3; font-size: 11px; padding: 6px 20px; display: flex; justify-content: space-between; margin-top: 10px; }
+ 
+  /* ── CAMBIO KPIs inline ── */
+ 
+  /* ══ LOGIN ══ */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0e0e1e;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    background: #1a1a2e;
+    border: 1px solid #2e2e50;
+    border-radius: 8px;
+    padding: 40px 44px;
+    width: 100%; max-width: 400px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .login-logo {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 32px;
+  }
+  .login-logo-dot { width: 12px; height: 12px; border-radius: 50%; background: #f2c811; flex-shrink: 0; }
+  .login-logo-text { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: .3px; }
+  .login-logo-sub { font-size: 11px; color: #6060a0; font-weight: 400; margin-top: 1px; }
+  .login-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .login-sub { font-size: 13px; color: #7070a0; margin-bottom: 28px; }
+  .login-field { margin-bottom: 16px; }
+  .login-label { font-size: 11px; color: #8080b0; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; display: block; }
+  .login-input {
+    width: 100%; padding: 10px 14px; font-size: 14px;
+    background: #252545; border: 1.5px solid #2e2e50;
+    border-radius: 5px; color: #fff; font-family: inherit;
+    outline: none; transition: border .15s;
+  }
+  .login-input::placeholder { color: #4a4a70; }
+  .login-input:focus { border-color: #117bca; }
+  .login-btn {
+    width: 100%; padding: 11px; margin-top: 8px;
+    background: #117bca; color: #fff; border: none;
+    border-radius: 5px; font-size: 14px; font-weight: 700;
+    font-family: inherit; cursor: pointer; letter-spacing: .3px;
+    transition: background .15s;
+  }
+  .login-btn:hover { background: #0e6aaa; }
+  .login-btn:disabled { background: #2a3a4a; color: #4a5a6a; cursor: not-allowed; }
+  .login-err {
+    background: #3a1010; border: 1px solid #6a2020;
+    color: #ff8080; font-size: 12px; padding: 9px 12px;
+    border-radius: 4px; margin-top: 12px; display: none;
+    text-align: center;
+  }
+  .login-divider { border: none; border-top: 1px solid #2e2e50; margin: 22px 0; }
+  .login-register-link {
+    text-align: center; font-size: 12px; color: #6060a0; margin-top: 14px;
+  }
+  .login-register-link a {
+    color: #f2c811; text-decoration: none; font-weight: 600; cursor: pointer;
+  }
+  .login-register-link a:hover { text-decoration: underline; }
+  .login-forgot { text-align: right; margin-top: -10px; margin-bottom: 16px; }
+  .login-forgot a { font-size: 11px; color: #5050a0; text-decoration: none; cursor: pointer; }
+  .login-forgot a:hover { color: #8080d0; }
+  .login-mode-indicator {
+    font-size: 10px; background: #252545; color: #f2c811;
+    padding: 2px 10px; border-radius: 10px; font-weight: 700;
+    margin-left: auto; letter-spacing: .3px;
+  }
+  #register-screen { display: none; }
+  #forgot-screen { display: none; }
+  .login-success-check {
+    display: none; text-align: center; padding: 10px 0 4px;
+  }
+  .login-success-check .check-circle {
+    width: 48px; height: 48px; border-radius: 50%; background: #107c10;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px; font-size: 22px; color: #fff;
+  }
+  .login-success-check p { color: #60e060; font-size: 13px; font-weight: 600; }
+  .topbar-user {
+    display: flex; align-items: center; gap: 8px;
+    background: #252545; padding: 4px 12px 4px 8px;
+    border-radius: 20px; cursor: pointer; transition: background .15s;
+  }
+  .topbar-user:hover { background: #2e2e60; }
+  .topbar-user-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #f2c811; color: #1a1a2e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .topbar-user-name { font-size: 12px; color: #d0d0e8; font-weight: 600; }
+  .logout-btn {
+    background: none; border: 1px solid #3e3e60; color: #8080b0;
+    border-radius: 4px; padding: 3px 10px; font-size: 11px;
+    font-family: inherit; cursor: pointer; transition: all .15s;
+  }
+  .logout-btn:hover { background: #d83b01; color: #fff; border-color: #d83b01; }
+ 
+  /* password strength */
+  .pw-strength-bar { height: 3px; border-radius: 2px; margin-top: 5px; background: #2e2e50; overflow: hidden; }
+  .pw-strength-fill { height: 100%; border-radius: 2px; transition: width .3s, background .3s; width: 0; }
+  .pw-strength-label { font-size: 10px; margin-top: 3px; font-weight: 600; }
+ 
+  .cambio-kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 10px; }
+  .cambio-kpi { background: #fff; border-radius: 4px; padding: 14px 16px; }
+  .mini-stats { display: flex; gap: 8px; margin-top: 10px; }
+  .mini-stat { flex: 1; border-radius: 4px; padding: 7px 10px; text-align: center; }
+  .mini-stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .mini-stat-val { font-size: 14px; font-weight: 700; }
 </style>
-
-<div class="dash">
+</head>
+<body>
+<!-- ══════════ TELA DE LOGIN ══════════ -->
+<div id="login-screen">
+  <div class="login-card">
+ 
+    <div class="login-logo">
+      <div class="login-logo-dot"></div>
+      <div>
+        <div class="login-logo-text">Dashboard Financeiro</div>
+        <div class="login-logo-sub">Investimentos & Bancos 2025</div>
+      </div>
+      <span class="login-mode-indicator" id="login-mode-badge">Login</span>
+    </div>
+ 
+    <!-- LOGIN -->
+    <div id="login-panel">
+      <div class="login-title">Bem-vindo de volta</div>
+      <div class="login-sub">Entre com seu e-mail para acessar o dashboard</div>
+      <div class="login-field">
+        <label class="login-label">E-mail</label>
+        <input class="login-input" id="login-email" type="email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+      <div class="login-field">
+        <label class="login-label">Senha</label>
+        <input class="login-input" id="login-pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="login-forgot"><a onclick="showForgot()">Esqueci minha senha</a></div>
+      <button class="login-btn" id="login-btn" onclick="doLogin()">Entrar</button>
+      <div class="login-err" id="login-err"></div>
+      <hr class="login-divider">
+      <div class="login-register-link">Não tem conta? <a onclick="showRegister()">Criar conta grátis</a></div>
+    </div>
+ 
+    <!-- CADASTRO -->
+    <div id="register-screen" style="display:none">
+      <div class="login-title">Criar conta</div>
+      <div class="login-sub">Preencha os dados para se cadastrar</div>
+      <div class="login-field">
+        <label class="login-label">Nome completo</label>
+        <input class="login-input" id="reg-nome" type="text" placeholder="João Silva">
+      </div>
+      <div class="login-field">
+        <label class="login-label">E-mail</label>
+        <input class="login-input" id="reg-email" type="email" placeholder="seu@email.com">
+      </div>
+      <div class="login-field">
+        <label class="login-label">Senha</label>
+        <input class="login-input" id="reg-pw" type="password" placeholder="Mínimo 6 caracteres" oninput="checkPwStrength(this.value)">
+        <div class="pw-strength-bar"><div class="pw-strength-fill" id="pw-fill"></div></div>
+        <div class="pw-strength-label" id="pw-label" style="color:#4a4a70">—</div>
+      </div>
+      <div class="login-field">
+        <label class="login-label">Confirmar senha</label>
+        <input class="login-input" id="reg-pw2" type="password" placeholder="Repita a senha" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <button class="login-btn" onclick="doRegister()">Cadastrar</button>
+      <div class="login-err" id="reg-err"></div>
+      <hr class="login-divider">
+      <div class="login-register-link">Já tem conta? <a onclick="showLogin()">Fazer login</a></div>
+    </div>
+ 
+    <!-- ESQUECI SENHA -->
+    <div id="forgot-screen" style="display:none">
+      <div class="login-title">Recuperar senha</div>
+      <div class="login-sub">Digite seu e-mail para receber as instruções</div>
+      <div class="login-field">
+        <label class="login-label">E-mail</label>
+        <input class="login-input" id="forgot-email" type="email" placeholder="seu@email.com" onkeydown="if(event.key==='Enter')doForgot()">
+      </div>
+      <button class="login-btn" onclick="doForgot()">Enviar instruções</button>
+      <div class="login-err" id="forgot-err"></div>
+      <div id="forgot-success" style="display:none;text-align:center;padding:14px 0 4px">
+        <div style="width:48px;height:48px;border-radius:50%;background:#107c10;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#fff">✓</div>
+        <p style="color:#60e060;font-size:13px;font-weight:600">E-mail de recuperação enviado!</p>
+      </div>
+      <hr class="login-divider">
+      <div class="login-register-link"><a onclick="showLogin()">← Voltar ao login</a></div>
+    </div>
+ 
+  </div>
+</div>
+<!-- ══════════ FIM LOGIN ══════════ -->
+ 
+<div class="dash" id="main-dash" style="display:none">
+ 
+  <!-- ══ TOPBAR ══ -->
   <div class="topbar">
     <div class="topbar-title"><span class="dot"></span> Dashboard Financeiro — Investimentos & Bancos 2025</div>
     <div class="topbar-right">
       <span>Atualizado: Mai 2025</span>
       <span class="tag">Ao vivo</span>
+      <div class="topbar-user">
+        <div class="topbar-user-avatar" id="topbar-avatar">?</div>
+        <span class="topbar-user-name" id="topbar-username">Usuário</span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Sair</button>
     </div>
   </div>
-
+ 
+  <!-- ══ NAV ══ -->
   <div class="nav">
-    <button class="nav-btn active">Visão Geral</button>
-    <button class="nav-btn">Renda Fixa</button>
-    <button class="nav-btn">Renda Variável</button>
-    <button class="nav-btn">Bancos</button>
-    <button class="nav-btn">Comparativo</button>
+    <button class="nav-btn active" onclick="showTab('geral',this)">Visão Geral</button>
+    <button class="nav-btn" onclick="showTab('rendafixa',this)">Renda Fixa</button>
+    <button class="nav-btn" onclick="showTab('acoes',this)">Ações / Carteira</button>
+    <button class="nav-btn" onclick="showTab('bancos',this)">Bancos</button>
+    <button class="nav-btn" onclick="showTab('cambio',this)">Câmbio</button>
+    <button class="nav-btn" onclick="showTab('comparativo',this)">Comparativo</button>
   </div>
-
-  <div class="content">
-    <div class="filters">
-      <span class="filter-label">Período:</span>
-      <button class="filter-chip active" onclick="setFilter(this)">12 meses</button>
-      <button class="filter-chip" onclick="setFilter(this)">6 meses</button>
-      <button class="filter-chip" onclick="setFilter(this)">3 meses</button>
-      <button class="filter-chip" onclick="setFilter(this)">YTD</button>
-      <span class="filter-label" style="margin-left:12px;">Perfil:</span>
-      <button class="filter-chip active" onclick="setFilter(this)">Todos</button>
-      <button class="filter-chip" onclick="setFilter(this)">Conservador</button>
-      <button class="filter-chip" onclick="setFilter(this)">Moderado</button>
-      <button class="filter-chip" onclick="setFilter(this)">Arrojado</button>
-    </div>
-
-    <div class="kpi-row">
-      <div class="kpi">
-        <div class="kpi-label">Selic (a.a.)</div>
-        <div class="kpi-value">13,75%</div>
-        <div class="kpi-delta up">▲ +0,25pp vs. mês anterior</div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 1 — VISÃO GERAL
+  ══════════════════════════════════════════════ -->
+  <div id="tab-geral" class="tab-page active">
+    <div class="content">
+ 
+      <div class="filters">
+        <span class="filter-label">Período:</span>
+        <button class="filter-chip active" onclick="setFilter(this)">12 meses</button>
+        <button class="filter-chip" onclick="setFilter(this)">6 meses</button>
+        <button class="filter-chip" onclick="setFilter(this)">3 meses</button>
+        <button class="filter-chip" onclick="setFilter(this)">YTD</button>
+        <span class="filter-label" style="margin-left:12px;">Perfil:</span>
+        <button class="filter-chip active" onclick="setFilter(this)">Todos</button>
+        <button class="filter-chip" onclick="setFilter(this)">Conservador</button>
+        <button class="filter-chip" onclick="setFilter(this)">Moderado</button>
+        <button class="filter-chip" onclick="setFilter(this)">Arrojado</button>
       </div>
-      <div class="kpi green">
-        <div class="kpi-label">CDI Acum. 12m</div>
-        <div class="kpi-value">13,65%</div>
-        <div class="kpi-delta up">▲ Melhor desde 2017</div>
-      </div>
-      <div class="kpi amber">
-        <div class="kpi-label">IPCA 12m</div>
-        <div class="kpi-value">4,82%</div>
-        <div class="kpi-delta down">▼ -0,31pp vs. estimativa</div>
-      </div>
-      <div class="kpi purple">
-        <div class="kpi-label">Ibovespa YTD</div>
-        <div class="kpi-value">+8,4%</div>
-        <div class="kpi-delta up">▲ Acima da média hist.</div>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-title">Melhores Investimentos — Rentabilidade 12m <span class="badge">% a.a.</span></div>
-        <div class="legend-row">
-          <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Renda Fixa</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>Renda Variável</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Fundos</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>Alternativo</span>
+ 
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Selic (a.a.)</div>
+          <div class="kpi-value">13,75%</div>
+          <div class="kpi-delta up">▲ +0,25pp vs. mês anterior</div>
         </div>
-        <div id="invest-bars"></div>
+        <div class="kpi green">
+          <div class="kpi-label">CDI Acum. 12m</div>
+          <div class="kpi-value">13,65%</div>
+          <div class="kpi-delta up">▲ Melhor desde 2017</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">IPCA 12m</div>
+          <div class="kpi-value">4,82%</div>
+          <div class="kpi-delta down">▼ -0,31pp vs. estimativa</div>
+        </div>
+        <div class="kpi purple">
+          <div class="kpi-label">Ibovespa YTD</div>
+          <div class="kpi-value">+8,4%</div>
+          <div class="kpi-delta up">▲ Acima da média hist.</div>
+        </div>
       </div>
-
-      <div class="card">
-        <div class="card-title">Ranking Melhores Bancos <span class="badge">Nota /10</span></div>
-        <div id="bank-rank"></div>
+ 
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Melhores Investimentos — Rentabilidade 12m <span class="badge">% a.a.</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Renda Fixa</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>Renda Variável</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Fundos</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>Alternativo</span>
+          </div>
+          <div id="invest-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Ranking Melhores Bancos <span class="badge">Nota /10</span></div>
+          <div id="bank-rank"></div>
+        </div>
       </div>
+ 
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">Evolução Rentabilidade (Jan–Mai 2025) <span class="badge">Mensal %</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Tesouro IPCA+</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>CDB 115% CDI</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>FII Médio</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Ibovespa</span>
+          </div>
+          <div class="chart-wrap" style="height:220px;"><canvas id="lineChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Alocação Ideal Moderado <span class="badge">%</span></div>
+          <div class="chart-wrap" style="height:220px;"><canvas id="pieChart"></canvas></div>
+        </div>
+      </div>
+ 
     </div>
-
-    <div class="grid-3">
+  </div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 2 — RENDA FIXA
+  ══════════════════════════════════════════════ -->
+  <div id="tab-rendafixa" class="tab-page">
+    <div class="content">
+ 
+      <div class="sec-header">
+        <div class="sec-bar"></div>
+        <span class="sec-title">Renda Fixa — Visão Detalhada</span>
+        <span class="sec-badge">Mai 2025</span>
+      </div>
+ 
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Tesouro Selic</div>
+          <div class="kpi-value">13,65%</div>
+          <div class="kpi-delta up">▲ +0,25pp no mês</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-label">CDB 115% CDI</div>
+          <div class="kpi-value">15,70%</div>
+          <div class="kpi-delta up">▲ Melhor CDB do mercado</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">LCI / LCA</div>
+          <div class="kpi-value">13,65%</div>
+          <div class="kpi-delta up">▲ Isento IR</div>
+        </div>
+        <div class="kpi purple">
+          <div class="kpi-label">Tesouro IPCA+ 2035</div>
+          <div class="kpi-value">IPCA+6,2%</div>
+          <div class="kpi-delta up">▲ Protege inflação</div>
+        </div>
+      </div>
+ 
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Ranking Renda Fixa — Rentabilidade 12m <span class="badge">% a.a.</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Tesouro</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>CDB/LCI/LCA</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Debenture</span>
+          </div>
+          <div id="rf-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Comparativo: Renda Fixa vs Inflação <span class="badge">% real</span></div>
+          <div class="chart-wrap" style="height:260px;"><canvas id="rfBarChart"></canvas></div>
+        </div>
+      </div>
+ 
       <div class="card">
-        <div class="card-title">Evolução Rentabilidade (Jan–Mai 2025) <span class="badge">Mensal %</span></div>
+        <div class="card-title">Tabela de Produtos — Renda Fixa <span class="badge">Atualizado Mai/2025</span></div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr style="background:#f9f8f7;">
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Produto</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Rentab. 12m</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Liquidez</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">IR</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Risco</th>
+              <th style="padding:6px 10px;text-align:left;font-size:11px;color:#605e5c;border-bottom:1px solid #edebe9;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Min. Aplicação</th>
+            </tr>
+          </thead>
+          <tbody id="rf-table-body"></tbody>
+        </table>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 3 — AÇÕES / CARTEIRA
+  ══════════════════════════════════════════════ -->
+  <div id="tab-acoes" class="tab-page">
+    <div class="content">
+ 
+      <div class="sec-header">
+        <div class="sec-bar"></div>
+        <span class="sec-title">Ações — Carteira Pessoal</span>
+        <span id="acao-count-badge" class="sec-badge">0 ativos</span>
+        <span style="flex:1"></span>
+        <span style="font-size:11px;color:#a19f9d;">B3 · Renda Variável</span>
+      </div>
+ 
+      <!-- KPIs Ações -->
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Patrimônio em Ações</div>
+          <div class="kpi-value" id="kpi-total">R$ 0,00</div>
+          <div class="kpi-delta neu" id="kpi-total-sub">Adicione ações abaixo</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-label">Resultado Total</div>
+          <div class="kpi-value" id="kpi-result">R$ 0,00</div>
+          <div class="kpi-delta neu" id="kpi-result-sub">—</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">Retorno Médio</div>
+          <div class="kpi-value" id="kpi-avg">0,00%</div>
+          <div class="kpi-delta neu" id="kpi-avg-sub">da carteira</div>
+        </div>
+        <div class="kpi purple">
+          <div class="kpi-label">Qtd. de Ativos</div>
+          <div class="kpi-value" id="kpi-qtd">0</div>
+          <div class="kpi-delta up" id="kpi-qtd-sub">ativos na carteira</div>
+        </div>
+      </div>
+ 
+      <!-- Formulário Adicionar Ação -->
+      <div class="add-form">
+        <div class="form-group">
+          <span class="form-label">Ticker</span>
+          <input class="form-input" id="inp-ticker" placeholder="Ex: PETR4" maxlength="6" style="width:88px;text-transform:uppercase">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Empresa</span>
+          <input class="form-input" id="inp-nome" placeholder="Ex: Petrobras" style="width:150px">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Setor</span>
+          <select class="form-input" id="inp-setor" style="width:130px">
+            <option value="Financeiro">Financeiro</option>
+            <option value="Energia">Energia</option>
+            <option value="Consumo">Consumo</option>
+            <option value="Tecnologia">Tecnologia</option>
+            <option value="Utilidades">Utilidades</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Materiais">Materiais</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Preço Médio (R$)</span>
+          <input class="form-input" id="inp-pm" placeholder="Ex: 38,50" style="width:110px">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Qtd. Ações</span>
+          <input class="form-input" id="inp-qtd" placeholder="Ex: 100" style="width:88px">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Cotação Atual (R$)</span>
+          <input class="form-input" id="inp-atual" placeholder="Ex: 42,10" style="width:120px">
+        </div>
+        <div class="form-group">
+          <span class="form-label">Div. Yield (%)</span>
+          <input class="form-input" id="inp-dy" placeholder="Ex: 8,5" style="width:88px">
+        </div>
+        <div class="form-group" style="justify-content:flex-end">
+          <button class="add-btn" onclick="adicionarAcao()">+ Adicionar Ação</button>
+        </div>
+        <span class="msg-ok" id="msg-ok">✓ Adicionado!</span>
+        <span class="msg-err" id="msg-err">⚠ Preencha os campos obrigatórios</span>
+      </div>
+ 
+      <!-- Tabela de Ações -->
+      <div class="card" style="margin-bottom:10px;overflow-x:auto">
+        <div class="card-title">
+          Carteira de Ações <span id="badge-count" class="badge">0 ativos</span>
+          <span style="font-size:11px;font-weight:400;color:#a19f9d;text-transform:none;letter-spacing:0">ordenado por posição</span>
+        </div>
+        <div id="empty-msg" class="empty-msg">Nenhuma ação adicionada ainda. Use o formulário acima para começar sua carteira.</div>
+        <table class="table-acoes" id="tabela" style="display:none">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Empresa</th>
+              <th>Setor</th>
+              <th>PM (R$)</th>
+              <th>Qtd.</th>
+              <th>Atual (R$)</th>
+              <th>Posição</th>
+              <th>Resultado</th>
+              <th>Retorno</th>
+              <th>D.Y.</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+ 
+      <!-- Gráficos da Carteira -->
+      <div class="grid-2" id="charts-section" style="display:none">
+        <div class="card">
+          <div class="card-title">Composição da Carteira <span class="badge">por posição</span></div>
+          <div id="barra-wrap"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Retorno por Ação <span class="badge green">% variação</span></div>
+          <div id="retorno-wrap"></div>
+        </div>
+      </div>
+ 
+      <div class="grid-2" id="setor-charts" style="display:none">
+        <div class="card">
+          <div class="card-title">Exposição por Setor <span class="badge">% da carteira</span></div>
+          <div id="setor-wrap"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Dividend Yield por Ação <span class="badge amber">% a.a.</span></div>
+          <div id="dy-wrap"></div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 4 — BANCOS
+  ══════════════════════════════════════════════ -->
+  <div id="tab-bancos" class="tab-page">
+    <div class="content">
+ 
+      <div class="sec-header">
+        <div class="sec-bar"></div>
+        <span class="sec-title">Ranking & Comparativo de Bancos</span>
+        <span class="sec-badge">Mai 2025</span>
+      </div>
+ 
+      <div class="kpi-row">
+        <div class="kpi purple">
+          <div class="kpi-label">Melhor Neobank</div>
+          <div class="kpi-value">Nubank</div>
+          <div class="kpi-delta up">▲ Nota 9,4 / 10</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-label">Melhor Rentab.</div>
+          <div class="kpi-value">XP Invest.</div>
+          <div class="kpi-delta up">▲ Score 9,5 em rentab.</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">Melhor App/UX</div>
+          <div class="kpi-value">Nubank</div>
+          <div class="kpi-delta up">▲ Score 9,8 em App/UX</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Melhor Tradicional</div>
+          <div class="kpi-value">Itaú</div>
+          <div class="kpi-delta neu">Nota 8,6 / 10</div>
+        </div>
+      </div>
+ 
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Ranking Geral Bancos <span class="badge">Nota /10</span></div>
+          <div id="bank-rank-full"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Comparativo Radar — Indicadores <span class="badge">Score composto</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Nubank</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>Inter</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>XP</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#605e5c"></span>Itaú</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>BTG</span>
+          </div>
+          <div class="chart-wrap" style="height:260px;"><canvas id="radarChart"></canvas></div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 5 — CÂMBIO
+  ══════════════════════════════════════════════ -->
+  <div id="tab-cambio" class="tab-page">
+    <div class="content">
+ 
+      <div class="sec-header">
+        <div class="sec-bar"></div>
+        <span class="sec-title">Câmbio — Dólar &amp; Euro vs Real</span>
+        <span class="sec-badge">Histórico Jan–Mai 2025</span>
+      </div>
+ 
+      <div class="cambio-kpi-grid">
+        <div class="cambio-kpi" style="border-left:4px solid #0e7a8a;">
+          <div class="kpi-label">Dólar Hoje</div>
+          <div class="kpi-value">R$ 5,72</div>
+          <div class="kpi-delta down">▲ +R$0,08 no dia</div>
+        </div>
+        <div class="cambio-kpi" style="border-left:4px solid #8764b8;">
+          <div class="kpi-label">Euro Hoje</div>
+          <div class="kpi-value">R$ 6,18</div>
+          <div class="kpi-delta up">▼ -R$0,04 no dia</div>
+        </div>
+        <div class="cambio-kpi" style="border-left:4px solid #d83b01;">
+          <div class="kpi-label">Máx USD 2025</div>
+          <div class="kpi-value">R$ 6,31</div>
+          <div class="kpi-delta neu">Atingido em Abr/2025</div>
+        </div>
+        <div class="cambio-kpi" style="border-left:4px solid #107c10;">
+          <div class="kpi-label">Mín USD 2025</div>
+          <div class="kpi-value">R$ 5,41</div>
+          <div class="kpi-delta neu">Atingido em Jan/2025</div>
+        </div>
+      </div>
+ 
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Dólar Americano — USD/BRL <span class="badge" style="background:#e0f4f6;color:#0e7a8a;">R$ por dólar</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>USD/BRL</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="usdChart"></canvas></div>
+          <div class="mini-stats">
+            <div class="mini-stat" style="background:#f3f2f1;"><div class="mini-stat-label" style="color:#605e5c;">Abertura Jan</div><div class="mini-stat-val" style="color:#1a1a2e;">R$ 5,65</div></div>
+            <div class="mini-stat" style="background:#fde7d7;"><div class="mini-stat-label" style="color:#d83b01;">Máxima</div><div class="mini-stat-val" style="color:#d83b01;">R$ 6,31</div></div>
+            <div class="mini-stat" style="background:#dff6dd;"><div class="mini-stat-label" style="color:#107c10;">Mínima</div><div class="mini-stat-val" style="color:#107c10;">R$ 5,41</div></div>
+            <div class="mini-stat" style="background:#e0f4f6;"><div class="mini-stat-label" style="color:#0e7a8a;">Atual</div><div class="mini-stat-val" style="color:#0e7a8a;">R$ 5,72</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Euro — EUR/BRL <span class="badge" style="background:#ede8f8;color:#8764b8;">R$ por euro</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>EUR/BRL</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="eurChart"></canvas></div>
+          <div class="mini-stats">
+            <div class="mini-stat" style="background:#f3f2f1;"><div class="mini-stat-label" style="color:#605e5c;">Abertura Jan</div><div class="mini-stat-val" style="color:#1a1a2e;">R$ 6,05</div></div>
+            <div class="mini-stat" style="background:#fde7d7;"><div class="mini-stat-label" style="color:#d83b01;">Máxima</div><div class="mini-stat-val" style="color:#d83b01;">R$ 6,87</div></div>
+            <div class="mini-stat" style="background:#dff6dd;"><div class="mini-stat-label" style="color:#107c10;">Mínima</div><div class="mini-stat-val" style="color:#107c10;">R$ 5,88</div></div>
+            <div class="mini-stat" style="background:#ede8f8;"><div class="mini-stat-label" style="color:#8764b8;">Atual</div><div class="mini-stat-val" style="color:#8764b8;">R$ 6,18</div></div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="card" style="margin-top:10px;">
+        <div class="card-title">USD vs EUR — Comparativo de Cotação (Jan–Mai 2025) <span class="badge">Duplo eixo Y</span></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>Dólar USD/BRL (eixo esq.)</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Euro EUR/BRL (eixo dir.)</span>
+        </div>
+        <div class="chart-wrap" style="height:200px;"><canvas id="cambioCompChart"></canvas></div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <!-- ══════════════════════════════════════════════
+       ABA 6 — COMPARATIVO
+  ══════════════════════════════════════════════ -->
+  <div id="tab-comparativo" class="tab-page">
+    <div class="content">
+ 
+      <div class="sec-header">
+        <div class="sec-bar"></div>
+        <span class="sec-title">Comparativo Geral de Investimentos</span>
+        <span class="sec-badge">Visão Consolidada 2025</span>
+      </div>
+ 
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Melhor Renda Fixa</div>
+          <div class="kpi-value">CDB 115%</div>
+          <div class="kpi-delta up">▲ 15,7% a.a.</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-label">Melhor R. Variável</div>
+          <div class="kpi-value">BTC/Crypto</div>
+          <div class="kpi-delta up">▲ 28,4% em 12m</div>
+        </div>
+        <div class="kpi purple">
+          <div class="kpi-label">Melhor Fundo</div>
+          <div class="kpi-value">Multimercado</div>
+          <div class="kpi-delta up">▲ 15,1% a.a.</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-label">Inflação (IPCA)</div>
+          <div class="kpi-value">4,82%</div>
+          <div class="kpi-delta down">▼ Abaixo da Selic</div>
+        </div>
+      </div>
+ 
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Todas as Classes — Rentabilidade 12m <span class="badge">% a.a.</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Renda Fixa</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>Renda Variável</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Fundos</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>Alternativo</span>
+          </div>
+          <div id="comp-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Alocação Ideal — Perfil Moderado <span class="badge">%</span></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Renda Fixa 45%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>Ações 25%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>FIIs 20%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Exterior 10%</span>
+          </div>
+          <div class="chart-wrap" style="height:260px;"><canvas id="pieChart2"></canvas></div>
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-title">Evolução Comparativa — Jan a Mai 2025 <span class="badge">Mensal %</span></div>
         <div class="legend-row">
           <span class="legend-item"><span class="legend-dot" style="background:#117bca"></span>Tesouro IPCA+</span>
           <span class="legend-item"><span class="legend-dot" style="background:#107c10"></span>CDB 115% CDI</span>
           <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span>FII Médio</span>
           <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Ibovespa</span>
         </div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="lineChart" role="img" aria-label="Linha de rentabilidade mensal jan a mai 2025 para 4 categorias de investimento">Rentabilidade mensal comparativa.</canvas></div>
+        <div class="chart-wrap" style="height:200px;"><canvas id="lineChart2"></canvas></div>
       </div>
-
-      <div class="card">
-        <div class="card-title">Alocação Ideal Moderado <span class="badge">%</span></div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="pieChart" role="img" aria-label="Gráfico de pizza com alocação ideal para perfil moderado">Renda Fixa 45%, Ações 25%, FIIs 20%, Exterior 10%.</canvas></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Comparativo Bancos — Indicadores Digitais & Taxa <span class="badge">Score composto</span></div>
-      <div class="chart-wrap" style="height:200px;"><canvas id="radarChart" role="img" aria-label="Radar comparativo de 5 bancos em 5 critérios">Comparativo radar de bancos digitais e tradicionais.</canvas></div>
+ 
     </div>
   </div>
-
-    <!-- ── SEÇÃO CÂMBIO ── -->
-    <div style="margin-top:10px;">
-
-      <!-- Título de seção estilo Power BI -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="width:4px;height:22px;background:#f2c811;border-radius:2px;"></div>
-        <span style="font-size:13px;font-weight:700;color:#1a1a2e;text-transform:uppercase;letter-spacing:.5px;">Câmbio — Dólar &amp; Euro vs Real</span>
-        <span style="font-size:10px;background:#fff4ce;color:#835b00;padding:2px 9px;border-radius:10px;font-weight:700;">Histórico Jan–Mai 2025</span>
-      </div>
-
-      <!-- KPIs Câmbio -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
-        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #0e7a8a;">
-          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Dólar Hoje</div>
-          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 5,72</div>
-          <div style="font-size:11px;font-weight:600;color:#d83b01;margin-top:4px;">▲ +R$0,08 no dia</div>
-        </div>
-        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #8764b8;">
-          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Euro Hoje</div>
-          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 6,18</div>
-          <div style="font-size:11px;font-weight:600;color:#107c10;margin-top:4px;">▼ -R$0,04 no dia</div>
-        </div>
-        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #d83b01;">
-          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Máx USD 2025</div>
-          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 6,31</div>
-          <div style="font-size:11px;font-weight:600;color:#605e5c;margin-top:4px;">Atingido em Abr/2025</div>
-        </div>
-        <div style="background:#fff;border-radius:4px;padding:14px 16px;border-left:4px solid #107c10;">
-          <div style="font-size:11px;color:#605e5c;text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:5px;">Mín USD 2025</div>
-          <div style="font-size:22px;font-weight:700;color:#1a1a2e;">R$ 5,41</div>
-          <div style="font-size:11px;font-weight:600;color:#605e5c;margin-top:4px;">Atingido em Jan/2025</div>
-        </div>
-      </div>
-
-      <!-- Gráficos lado a lado -->
-      <div class="grid-2">
-
-        <!-- Gráfico Dólar -->
-        <div class="card">
-          <div class="card-title">
-            Dólar Americano — USD/BRL
-            <span class="badge" style="background:#e0f4f6;color:#0e7a8a;">R$ por dólar</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>USD/BRL</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
-          </div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="usdChart" role="img" aria-label="Cotação dólar USD/BRL janeiro a maio 2025">Cotação do dólar frente ao real em 2025.</canvas>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:10px;">
-            <div style="flex:1;background:#f3f2f1;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#605e5c;font-weight:700;text-transform:uppercase;">Abertura Jan</div>
-              <div style="font-size:14px;font-weight:700;color:#1a1a2e;">R$ 5,65</div>
-            </div>
-            <div style="flex:1;background:#fde7d7;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#d83b01;font-weight:700;text-transform:uppercase;">Máxima</div>
-              <div style="font-size:14px;font-weight:700;color:#d83b01;">R$ 6,31</div>
-            </div>
-            <div style="flex:1;background:#dff6dd;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#107c10;font-weight:700;text-transform:uppercase;">Mínima</div>
-              <div style="font-size:14px;font-weight:700;color:#107c10;">R$ 5,41</div>
-            </div>
-            <div style="flex:1;background:#e0f4f6;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#0e7a8a;font-weight:700;text-transform:uppercase;">Atual</div>
-              <div style="font-size:14px;font-weight:700;color:#0e7a8a;">R$ 5,72</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gráfico Euro -->
-        <div class="card">
-          <div class="card-title">
-            Euro — EUR/BRL
-            <span class="badge" style="background:#ede8f8;color:#8764b8;">R$ por euro</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>EUR/BRL</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#d83b01;border-radius:50%"></span>Máxima</span>
-            <span class="legend-item"><span class="legend-dot" style="background:#107c10;border-radius:50%"></span>Mínima</span>
-          </div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="eurChart" role="img" aria-label="Cotação euro EUR/BRL janeiro a maio 2025">Cotação do euro frente ao real em 2025.</canvas>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:10px;">
-            <div style="flex:1;background:#f3f2f1;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#605e5c;font-weight:700;text-transform:uppercase;">Abertura Jan</div>
-              <div style="font-size:14px;font-weight:700;color:#1a1a2e;">R$ 6,05</div>
-            </div>
-            <div style="flex:1;background:#fde7d7;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#d83b01;font-weight:700;text-transform:uppercase;">Máxima</div>
-              <div style="font-size:14px;font-weight:700;color:#d83b01;">R$ 6,87</div>
-            </div>
-            <div style="flex:1;background:#dff6dd;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#107c10;font-weight:700;text-transform:uppercase;">Mínima</div>
-              <div style="font-size:14px;font-weight:700;color:#107c10;">R$ 5,88</div>
-            </div>
-            <div style="flex:1;background:#ede8f8;border-radius:4px;padding:7px 10px;text-align:center;">
-              <div style="font-size:10px;color:#8764b8;font-weight:700;text-transform:uppercase;">Atual</div>
-              <div style="font-size:14px;font-weight:700;color:#8764b8;">R$ 6,18</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Gráfico comparativo USD vs EUR -->
-      <div class="card" style="margin-top:10px;">
-        <div class="card-title">
-          USD vs EUR — Comparativo de Cotação (Jan–Mai 2025)
-          <span class="badge">Duplo eixo Y</span>
-        </div>
-        <div class="legend-row">
-          <span class="legend-item"><span class="legend-dot" style="background:#0e7a8a"></span>Dólar USD/BRL (eixo esq.)</span>
-          <span class="legend-item"><span class="legend-dot" style="background:#8764b8"></span>Euro EUR/BRL (eixo dir.)</span>
-        </div>
-        <div class="chart-wrap" style="height:200px;">
-          <canvas id="cambioCompChart" role="img" aria-label="Comparativo USD e EUR vs BRL com dois eixos">Comparativo câmbio dólar e euro.</canvas>
-        </div>
-      </div>
-
-    </div>
-    <!-- ── FIM SEÇÃO CÂMBIO ── -->
-
+ 
+  <!-- ══ FOOTER ══ -->
   <div class="footer-bar">
     <span>Fonte: Banco Central, B3, ANBIMA — Dados simulados para fins ilustrativos</span>
-    <span>Dashboard Financeiro v2.1 · Maio 2025</span>
+    <span>Dashboard Financeiro v3.0 · Maio 2025</span>
   </div>
-</div>
-
+ 
+</div><!-- #main-dash -->
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+/* ─── NAVEGAÇÃO ─── */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  // inicializa charts lazy
+  if (id === 'cambio' && !window._cambioInit) { initCambioCharts(); window._cambioInit = true; }
+  if (id === 'bancos' && !window._bancosInit) { initBancosCharts(); window._bancosInit = true; }
+  if (id === 'comparativo' && !window._compInit) { initComparativoCharts(); window._compInit = true; }
+  if (id === 'rendafixa' && !window._rfInit) { initRFCharts(); window._rfInit = true; }
+}
+ 
 function setFilter(el) {
   const group = el.parentElement.querySelectorAll('.filter-chip');
   const labels = ['12 meses','6 meses','3 meses','YTD'];
   const isTime = labels.includes(el.textContent);
-  group.forEach(b => { if(labels.includes(b.textContent) === isTime) b.classList.remove('active'); });
+  group.forEach(b => { if (labels.includes(b.textContent) === isTime) b.classList.remove('active'); });
   el.classList.add('active');
 }
-
+ 
+/* ─── UTILS ─── */
+function fmtBRL(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtPct(v){return (v>=0?'+':'')+v.toFixed(2)+'%';}
+ 
+/* ─── DADOS GLOBAIS ─── */
 const investments = [
   { name: 'CDB 115% CDI', val: 15.7, color: '#117bca', pct: 95 },
   { name: 'LCI/LCA 100% CDI', val: 13.7, color: '#117bca', pct: 83 },
@@ -351,178 +892,513 @@ const investments = [
   { name: 'Multimercado Top', val: 15.1, color: '#8764b8', pct: 90 },
   { name: 'BTC/Crypto', val: 28.4, color: '#d83b01', pct: 100 },
 ];
-
-const bars = document.getElementById('invest-bars');
-investments.forEach(d => {
-  bars.innerHTML += `<div class="bar-row">
-    <span class="bar-name" title="${d.name}">${d.name}</span>
-    <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
-    <span class="bar-val">${d.val.toFixed(1)}%</span>
-  </div>`;
-});
-
+ 
 const banks = [
   { name: 'Nubank', sub: 'Digital · Neobank', score: 9.4, delta: '+0.2', color: '#8764b8', up: true },
   { name: 'Inter', sub: 'Digital · Banco', score: 9.1, delta: '+0.1', color: '#d83b01', up: true },
   { name: 'XP Investimentos', sub: 'Corretora', score: 9.0, delta: '=', color: '#117bca', up: true },
-  { name: 'Itaú Unibanco', sub: 'Tradicional', score: 8.6, delta: '-0.1', color: '#117bca', up: false },
   { name: 'BTG Pactual', sub: 'Digital · Premium', score: 8.8, delta: '+0.3', color: '#107c10', up: true },
+  { name: 'Itaú Unibanco', sub: 'Tradicional', score: 8.6, delta: '-0.1', color: '#117bca', up: false },
   { name: 'Bradesco', sub: 'Tradicional', score: 8.1, delta: '=', color: '#605e5c', up: true },
 ];
-const numClasses = ['gold','silver','bronze','other','other','other'];
-const br = document.getElementById('bank-rank');
-banks.forEach((b,i) => {
-  const pct = Math.round((b.score/10)*100);
-  br.innerHTML += `<div class="rank">
-    <span class="rank-num ${numClasses[i]}">${i+1}</span>
-    <div class="rank-info">
-      <div class="rank-name">${b.name}</div>
-      <div class="rank-sub">${b.sub}</div>
-      <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${b.color}"></div></div>
-    </div>
-    <span class="rank-score ${b.up?'up':'down'}">${b.score} <span style="font-size:10px;font-weight:400">${b.delta}</span></span>
-  </div>`;
-});
-
-new Chart(document.getElementById('lineChart'), {
-  type: 'line',
-  data: {
-    labels: ['Jan','Fev','Mar','Abr','Mai'],
-    datasets: [
-      { label: 'Tesouro IPCA+', data: [1.1,1.05,0.9,1.2,1.15], borderColor: '#117bca', backgroundColor: 'rgba(17,123,202,0.08)', tension: 0.4, pointRadius: 4, fill: true },
-      { label: 'CDB 115% CDI', data: [1.25,1.2,1.3,1.2,1.28], borderColor: '#107c10', backgroundColor: 'rgba(16,124,16,0.07)', tension: 0.4, pointRadius: 4, fill: true, borderDash: [4,2] },
-      { label: 'FII Médio', data: [0.9,1.1,0.85,1.0,1.05], borderColor: '#d83b01', backgroundColor: 'rgba(216,59,1,0.06)', tension: 0.4, pointRadius: 4, fill: false, borderDash: [6,3] },
-      { label: 'Ibovespa', data: [2.1,-0.8,1.5,3.2,1.4], borderColor: '#8764b8', backgroundColor: 'rgba(135,100,184,0.07)', tension: 0.4, pointRadius: 4, fill: false },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
-    scales: {
-      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
-      y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => v.toFixed(1)+'%' } }
-    }
-  }
-});
-
-new Chart(document.getElementById('pieChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Renda Fixa','Ações','FIIs','Exterior'],
-    datasets: [{ data: [45,25,20,10], backgroundColor: ['#117bca','#107c10','#d83b01','#8764b8'], borderWidth: 2, borderColor: '#fff', hoverOffset: 6 }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '60%',
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ctx.label+': '+ctx.parsed+'%' } }
-    }
-  }
-});
-
-new Chart(document.getElementById('radarChart'), {
-  type: 'radar',
-  data: {
-    labels: ['Rentabilidade','App/UX','Suporte','Taxas','Produtos'],
-    datasets: [
-      { label: 'Nubank', data: [8,9.8,8.5,9.5,8], borderColor: '#8764b8', backgroundColor: 'rgba(135,100,184,0.1)', pointRadius: 3 },
-      { label: 'Inter', data: [8.5,9.2,8,9,9], borderColor: '#d83b01', backgroundColor: 'rgba(216,59,1,0.1)', pointRadius: 3 },
-      { label: 'XP', data: [9.5,8.5,8.5,7,9.5], borderColor: '#117bca', backgroundColor: 'rgba(17,123,202,0.1)', pointRadius: 3 },
-      { label: 'Itaú', data: [8,7.5,8,6.5,9], borderColor: '#605e5c', backgroundColor: 'rgba(96,94,92,0.08)', pointRadius: 3 },
-      { label: 'BTG', data: [9.2,8.8,8.2,8.5,9.5], borderColor: '#107c10', backgroundColor: 'rgba(16,124,16,0.08)', pointRadius: 3 },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 10, padding: 12 } } },
-    scales: { r: { min: 5, max: 10, ticks: { stepSize: 1, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.08)' } } }
-  }
-});
-
-// ─── USD CHART ───
-const meses = ['Jan','Fev','Mar','Abr','Mai'];
-const usdVals = [5.65, 5.80, 6.10, 6.31, 5.72];
-new Chart(document.getElementById('usdChart'), {
-  type: 'line',
-  data: {
-    labels: meses,
-    datasets: [{
-      label: 'USD/BRL',
-      data: usdVals,
-      borderColor: '#0e7a8a',
-      backgroundColor: 'rgba(14,122,138,0.10)',
-      tension: 0.4,
-      fill: true,
-      borderWidth: 2.5,
-      pointBackgroundColor: usdVals.map(v => v === Math.max(...usdVals) ? '#d83b01' : v === Math.min(...usdVals) ? '#107c10' : '#0e7a8a'),
-      pointRadius: usdVals.map(v => (v === Math.max(...usdVals) || v === Math.min(...usdVals)) ? 8 : 5),
-      pointHoverRadius: 8,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' USD/BRL: R$ ' + ctx.parsed.y.toFixed(2) } } },
-    scales: {
-      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
-      y: { min: 5.3, max: 6.5, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => 'R$' + v.toFixed(2) } }
-    }
-  }
-});
-
-// ─── EUR CHART ───
-const eurVals = [6.05, 6.22, 6.55, 6.87, 6.18];
-new Chart(document.getElementById('eurChart'), {
-  type: 'line',
-  data: {
-    labels: meses,
-    datasets: [{
-      label: 'EUR/BRL',
-      data: eurVals,
-      borderColor: '#8764b8',
-      backgroundColor: 'rgba(135,100,184,0.10)',
-      tension: 0.4,
-      fill: true,
-      borderWidth: 2.5,
-      pointBackgroundColor: eurVals.map(v => v === Math.max(...eurVals) ? '#d83b01' : v === Math.min(...eurVals) ? '#107c10' : '#8764b8'),
-      pointRadius: eurVals.map(v => (v === Math.max(...eurVals) || v === Math.min(...eurVals)) ? 8 : 5),
-      pointHoverRadius: 8,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' EUR/BRL: R$ ' + ctx.parsed.y.toFixed(2) } } },
-    scales: {
-      x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
-      y: { min: 5.7, max: 7.1, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => 'R$' + v.toFixed(2) } }
-    }
-  }
-});
-
-// ─── COMPARATIVO USD vs EUR ───
-new Chart(document.getElementById('cambioCompChart'), {
-  type: 'bar',
-  data: {
-    labels: meses,
-    datasets: [
-      { label: 'USD/BRL', data: usdVals, backgroundColor: 'rgba(14,122,138,0.75)', borderColor: '#0e7a8a', borderWidth: 1.5, borderRadius: 3, yAxisID: 'yUsd' },
-      { label: 'EUR/BRL', data: eurVals, backgroundColor: 'rgba(135,100,184,0.75)', borderColor: '#8764b8', borderWidth: 1.5, borderRadius: 3, yAxisID: 'yEur' },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { mode: 'index', intersect: false, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': R$ ' + ctx.parsed.y.toFixed(2) } }
+ 
+const rfProducts = [
+  { nome:'Tesouro Selic 2027', rent:'13,65%', liq:'D+1', ir:'Sim', risco:'Baixíssimo', min:'R$ 100' },
+  { nome:'Tesouro IPCA+ 2035', rent:'IPCA+6,2%', liq:'D+1', ir:'Sim', risco:'Baixo', min:'R$ 100' },
+  { nome:'Tesouro Prefixado 2029', rent:'13,80%', liq:'D+1', ir:'Sim', risco:'Baixo', min:'R$ 100' },
+  { nome:'CDB 115% CDI (Banco X)', rent:'15,70%', liq:'No venc.', ir:'Sim', risco:'Baixo (FGC)', min:'R$ 1.000' },
+  { nome:'LCI 100% CDI', rent:'13,65%', liq:'90 dias', ir:'Isento', risco:'Baixo (FGC)', min:'R$ 5.000' },
+  { nome:'LCA 100% CDI', rent:'13,65%', liq:'90 dias', ir:'Isento', risco:'Baixo (FGC)', min:'R$ 5.000' },
+  { nome:'CRI / CRA', rent:'IPCA+7%', liq:'Mercado', ir:'Isento', risco:'Médio', min:'R$ 1.000' },
+  { nome:'Debenture Incentivada', rent:'CDI+2%', liq:'Mercado', ir:'Isento', risco:'Médio', min:'R$ 1.000' },
+];
+ 
+/* ─── CARTEIRA DE AÇÕES ─── */
+let carteira = [
+  {ticker:'PETR4',nome:'Petrobras',setor:'Energia',pm:36.80,qtd:200,atual:41.50,dy:13.2},
+  {ticker:'VALE3',nome:'Vale',setor:'Materiais',pm:62.00,qtd:100,atual:58.30,dy:9.8},
+  {ticker:'ITUB4',nome:'Itaú Unibanco',setor:'Financeiro',pm:30.10,qtd:300,atual:34.90,dy:6.5},
+  {ticker:'WEGE3',nome:'WEG',setor:'Tecnologia',pm:44.00,qtd:150,atual:51.20,dy:1.8},
+  {ticker:'BBAS3',nome:'Banco do Brasil',setor:'Financeiro',pm:25.50,qtd:250,atual:27.80,dy:11.4},
+];
+const setorClass={Financeiro:'s-fin',Energia:'s-ene',Consumo:'s-con',Tecnologia:'s-tec',Utilidades:'s-util','Saúde':'s-saude',Materiais:'s-mat'};
+const setorColors={Financeiro:'#117bca',Energia:'#f2c811',Consumo:'#107c10',Tecnologia:'#8764b8',Utilidades:'#0e7a8a','Saúde':'#d83b01',Materiais:'#605e5c'};
+const chartColors=['#117bca','#107c10','#8764b8','#d83b01','#0e7a8a','#f2c811','#605e5c','#e81123'];
+ 
+/* ══════════ INIT VISÃO GERAL ══════════ */
+(function initGeral() {
+  // invest bars
+  const bars = document.getElementById('invest-bars');
+  investments.forEach(d => {
+    bars.innerHTML += `<div class="bar-row">
+      <span class="bar-name" title="${d.name}">${d.name}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+      <span class="bar-val">${d.val.toFixed(1)}%</span>
+    </div>`;
+  });
+ 
+  // bank rank (visão geral - compact)
+  const numClasses=['gold','silver','bronze','other','other','other'];
+  const br = document.getElementById('bank-rank');
+  banks.forEach((b,i) => {
+    const pct = Math.round((b.score/10)*100);
+    br.innerHTML += `<div class="rank">
+      <span class="rank-num ${numClasses[i]}">${i+1}</span>
+      <div class="rank-info">
+        <div class="rank-name">${b.name}</div>
+        <div class="rank-sub">${b.sub}</div>
+        <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${b.color}"></div></div>
+      </div>
+      <span class="rank-score ${b.up?'up':'down'}">${b.score} <span style="font-size:10px;font-weight:400">${b.delta}</span></span>
+    </div>`;
+  });
+ 
+  new Chart(document.getElementById('lineChart'), {
+    type:'line',
+    data:{
+      labels:['Jan','Fev','Mar','Abr','Mai'],
+      datasets:[
+        {label:'Tesouro IPCA+',data:[1.1,1.05,0.9,1.2,1.15],borderColor:'#117bca',backgroundColor:'rgba(17,123,202,0.08)',tension:0.4,pointRadius:4,fill:true},
+        {label:'CDB 115% CDI',data:[1.25,1.2,1.3,1.2,1.28],borderColor:'#107c10',backgroundColor:'rgba(16,124,16,0.07)',tension:0.4,pointRadius:4,fill:true,borderDash:[4,2]},
+        {label:'FII Médio',data:[0.9,1.1,0.85,1.0,1.05],borderColor:'#d83b01',backgroundColor:'rgba(216,59,1,0.06)',tension:0.4,pointRadius:4,fill:false,borderDash:[6,3]},
+        {label:'Ibovespa',data:[2.1,-0.8,1.5,3.2,1.4],borderColor:'#8764b8',backgroundColor:'rgba(135,100,184,0.07)',tension:0.4,pointRadius:4,fill:false},
+      ]
     },
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-      yUsd: { position: 'left',  min: 5.3, max: 6.5, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, color: '#0e7a8a', callback: v => 'R$' + v.toFixed(2) } },
-      yEur: { position: 'right', min: 5.7, max: 7.1, grid: { drawOnChartArea: false }, ticks: { font: { size: 11 }, color: '#8764b8', callback: v => 'R$' + v.toFixed(2) } },
-    }
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>v.toFixed(1)+'%'}}}}
+  });
+ 
+  new Chart(document.getElementById('pieChart'), {
+    type:'doughnut',
+    data:{labels:['Renda Fixa','Ações','FIIs','Exterior'],datasets:[{data:[45,25,20,10],backgroundColor:['#117bca','#107c10','#d83b01','#8764b8'],borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,padding:10}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+'%'}}}}
+  });
+})();
+ 
+/* ══════════ INIT RENDA FIXA ══════════ */
+function initRFCharts() {
+  const rfBars = [
+    {name:'CDB 115% CDI',val:15.7,color:'#107c10',pct:100},
+    {name:'LCI/LCA 100% CDI',val:13.7,color:'#107c10',pct:87},
+    {name:'Tesouro IPCA+',val:12.4,color:'#117bca',pct:79},
+    {name:'Tesouro Selic',val:13.65,color:'#117bca',pct:87},
+    {name:'Prefixado 13,8%',val:13.8,color:'#117bca',pct:88},
+    {name:'Debenture CDI+2%',val:15.6,color:'#8764b8',pct:99},
+    {name:'CRI/CRA IPCA+7%',val:12.0,color:'#8764b8',pct:76},
+  ];
+  const rfb = document.getElementById('rf-bars');
+  rfBars.forEach(d => {
+    rfb.innerHTML += `<div class="bar-row">
+      <span class="bar-name" title="${d.name}">${d.name}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+      <span class="bar-val">${d.val.toFixed(1)}%</span>
+    </div>`;
+  });
+ 
+  new Chart(document.getElementById('rfBarChart'), {
+    type:'bar',
+    data:{
+      labels:['Tesouro Selic','CDB 115%','LCI/LCA','Prefixado','IPCA+','Debenture','IPCA (ref)'],
+      datasets:[
+        {label:'Rentabilidade Nominal',data:[13.65,15.7,13.65,13.8,12.4,15.6,4.82],backgroundColor:['#117bca','#107c10','#107c10','#117bca','#117bca','#8764b8','#d83b01'],borderRadius:3},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y.toFixed(2)+'%'}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'}}}}
+  });
+ 
+  const tbody = document.getElementById('rf-table-body');
+  rfProducts.forEach(p => {
+    tbody.innerHTML += `<tr>
+      <td style="font-weight:600">${p.nome}</td>
+      <td><span class="pill-up">${p.rent}</span></td>
+      <td>${p.liq}</td>
+      <td>${p.ir === 'Isento' ? '<span class="pill-up">Isento</span>' : p.ir}</td>
+      <td>${p.risco}</td>
+      <td>${p.min}</td>
+    </tr>`;
+  });
+}
+ 
+/* ══════════ INIT BANCOS ══════════ */
+function initBancosCharts() {
+  const numClasses=['gold','silver','bronze','other','other','other'];
+  const brf = document.getElementById('bank-rank-full');
+  banks.forEach((b,i) => {
+    const pct = Math.round((b.score/10)*100);
+    brf.innerHTML += `<div class="rank">
+      <span class="rank-num ${numClasses[i]}">${i+1}</span>
+      <div class="rank-info">
+        <div class="rank-name">${b.name}</div>
+        <div class="rank-sub">${b.sub}</div>
+        <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${b.color}"></div></div>
+      </div>
+      <span class="rank-score ${b.up?'up':'down'}">${b.score} <span style="font-size:10px;font-weight:400">${b.delta}</span></span>
+    </div>`;
+  });
+ 
+  new Chart(document.getElementById('radarChart'), {
+    type:'radar',
+    data:{
+      labels:['Rentabilidade','App/UX','Suporte','Taxas','Produtos'],
+      datasets:[
+        {label:'Nubank',data:[8,9.8,8.5,9.5,8],borderColor:'#8764b8',backgroundColor:'rgba(135,100,184,0.1)',pointRadius:3},
+        {label:'Inter',data:[8.5,9.2,8,9,9],borderColor:'#d83b01',backgroundColor:'rgba(216,59,1,0.1)',pointRadius:3},
+        {label:'XP',data:[9.5,8.5,8.5,7,9.5],borderColor:'#117bca',backgroundColor:'rgba(17,123,202,0.1)',pointRadius:3},
+        {label:'Itaú',data:[8,7.5,8,6.5,9],borderColor:'#605e5c',backgroundColor:'rgba(96,94,92,0.08)',pointRadius:3},
+        {label:'BTG',data:[9.2,8.8,8.2,8.5,9.5],borderColor:'#107c10',backgroundColor:'rgba(16,124,16,0.08)',pointRadius:3},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10,padding:12}}},scales:{r:{min:5,max:10,ticks:{stepSize:1,font:{size:10}},grid:{color:'rgba(0,0,0,0.08)'}}}}
+  });
+}
+ 
+/* ══════════ INIT CÂMBIO ══════════ */
+function initCambioCharts() {
+  const meses=['Jan','Fev','Mar','Abr','Mai'];
+  const usdVals=[5.65,5.80,6.10,6.31,5.72];
+  const eurVals=[6.05,6.22,6.55,6.87,6.18];
+ 
+  new Chart(document.getElementById('usdChart'),{type:'line',data:{labels:meses,datasets:[{label:'USD/BRL',data:usdVals,borderColor:'#0e7a8a',backgroundColor:'rgba(14,122,138,0.10)',tension:0.4,fill:true,borderWidth:2.5,pointBackgroundColor:usdVals.map(v=>v===Math.max(...usdVals)?'#d83b01':v===Math.min(...usdVals)?'#107c10':'#0e7a8a'),pointRadius:usdVals.map(v=>(v===Math.max(...usdVals)||v===Math.min(...usdVals))?8:5)}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' USD/BRL: R$ '+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11}}},y:{min:5.3,max:6.5,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>'R$'+v.toFixed(2)}}}}});
+ 
+  new Chart(document.getElementById('eurChart'),{type:'line',data:{labels:meses,datasets:[{label:'EUR/BRL',data:eurVals,borderColor:'#8764b8',backgroundColor:'rgba(135,100,184,0.10)',tension:0.4,fill:true,borderWidth:2.5,pointBackgroundColor:eurVals.map(v=>v===Math.max(...eurVals)?'#d83b01':v===Math.min(...eurVals)?'#107c10':'#8764b8'),pointRadius:eurVals.map(v=>(v===Math.max(...eurVals)||v===Math.min(...eurVals))?8:5)}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' EUR/BRL: R$ '+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11}}},y:{min:5.7,max:7.1,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>'R$'+v.toFixed(2)}}}}});
+ 
+  new Chart(document.getElementById('cambioCompChart'),{type:'bar',data:{labels:meses,datasets:[{label:'USD/BRL',data:usdVals,backgroundColor:'rgba(14,122,138,0.75)',borderColor:'#0e7a8a',borderWidth:1.5,borderRadius:3,yAxisID:'yUsd'},{label:'EUR/BRL',data:eurVals,backgroundColor:'rgba(135,100,184,0.75)',borderColor:'#8764b8',borderWidth:1.5,borderRadius:3,yAxisID:'yEur'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': R$ '+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{font:{size:11}}},yUsd:{position:'left',min:5.3,max:6.5,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},color:'#0e7a8a',callback:v=>'R$'+v.toFixed(2)}},yEur:{position:'right',min:5.7,max:7.1,grid:{drawOnChartArea:false},ticks:{font:{size:11},color:'#8764b8',callback:v=>'R$'+v.toFixed(2)}}}}});
+}
+ 
+/* ══════════ INIT COMPARATIVO ══════════ */
+function initComparativoCharts() {
+  const cb = document.getElementById('comp-bars');
+  investments.forEach(d => {
+    cb.innerHTML += `<div class="bar-row">
+      <span class="bar-name" title="${d.name}">${d.name}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+      <span class="bar-val">${d.val.toFixed(1)}%</span>
+    </div>`;
+  });
+ 
+  new Chart(document.getElementById('pieChart2'),{type:'doughnut',data:{labels:['Renda Fixa','Ações','FIIs','Exterior'],datasets:[{data:[45,25,20,10],backgroundColor:['#117bca','#107c10','#d83b01','#8764b8'],borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12,padding:10}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+'%'}}}}});
+ 
+  new Chart(document.getElementById('lineChart2'),{type:'line',data:{labels:['Jan','Fev','Mar','Abr','Mai'],datasets:[{label:'Tesouro IPCA+',data:[1.1,1.05,0.9,1.2,1.15],borderColor:'#117bca',backgroundColor:'rgba(17,123,202,0.08)',tension:0.4,pointRadius:4,fill:true},{label:'CDB 115% CDI',data:[1.25,1.2,1.3,1.2,1.28],borderColor:'#107c10',backgroundColor:'rgba(16,124,16,0.07)',tension:0.4,pointRadius:4,fill:true,borderDash:[4,2]},{label:'FII Médio',data:[0.9,1.1,0.85,1.0,1.05],borderColor:'#d83b01',backgroundColor:'rgba(216,59,1,0.06)',tension:0.4,pointRadius:4,fill:false,borderDash:[6,3]},{label:'Ibovespa',data:[2.1,-0.8,1.5,3.2,1.4],borderColor:'#8764b8',backgroundColor:'rgba(135,100,184,0.07)',tension:0.4,pointRadius:4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>v.toFixed(1)+'%'}}}}});
+}
+ 
+/* ══════════ AÇÕES — RENDERIZAÇÃO ══════════ */
+function renderAcoes() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  const total = carteira.reduce((s,a) => s + a.atual*a.qtd, 0);
+  const hasAcoes = carteira.length > 0;
+ 
+  document.getElementById('empty-msg').style.display = hasAcoes ? 'none' : 'block';
+  document.getElementById('tabela').style.display = hasAcoes ? 'table' : 'none';
+  document.getElementById('charts-section').style.display = hasAcoes ? 'grid' : 'none';
+  document.getElementById('setor-charts').style.display = hasAcoes ? 'grid' : 'none';
+ 
+  let totalPM=0, totalRes=0;
+  const sorted = [...carteira].sort((a,b) => (b.atual*b.qtd)-(a.atual*a.qtd));
+ 
+  sorted.forEach(a => {
+    const pos = a.atual*a.qtd;
+    const custo = a.pm*a.qtd;
+    const res = pos - custo;
+    const ret = ((a.atual-a.pm)/a.pm)*100;
+    totalPM += custo; totalRes += res;
+    const pctCarta = total>0?((pos/total)*100):0;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="tick">${a.ticker}</span></td>
+      <td style="font-weight:600">${a.nome}</td>
+      <td><span class="tag-setor ${setorClass[a.setor]||'s-mat'}">${a.setor}</span></td>
+      <td>${fmtBRL(a.pm)}</td>
+      <td>${a.qtd.toLocaleString('pt-BR')}</td>
+      <td style="font-weight:600">${fmtBRL(a.atual)}</td>
+      <td style="font-weight:700">${fmtBRL(pos)}<br><span style="font-size:10px;color:#605e5c">${pctCarta.toFixed(1)}% cart.</span></td>
+      <td><span class="${res>=0?'pill-up':'pill-dn'}">${fmtBRL(res)}</span></td>
+      <td><span class="${ret>=0?'pill-up':ret===0?'pill-neu':'pill-dn'}">${fmtPct(ret)}</span></td>
+      <td>${a.dy?a.dy.toFixed(1)+'%':'—'}</td>
+      <td><button class="delbtn" onclick="removerAcao(${carteira.indexOf(a)})">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+ 
+  const retMedio = totalPM>0?((totalRes/totalPM)*100):0;
+  document.getElementById('kpi-total').textContent = fmtBRL(total);
+  document.getElementById('kpi-total-sub').textContent = `${carteira.length} ativo${carteira.length!==1?'s':''}`;
+  document.getElementById('kpi-result').textContent = fmtBRL(totalRes);
+  const rEl = document.getElementById('kpi-result-sub');
+  rEl.textContent = fmtPct(retMedio)+' sobre o custo';
+  rEl.className = 'kpi-delta '+(totalRes>=0?'up':'down');
+  document.getElementById('kpi-avg').textContent = fmtPct(retMedio);
+  document.getElementById('kpi-qtd').textContent = carteira.length;
+  document.getElementById('acao-count-badge').textContent = carteira.length+' ativo'+(carteira.length!==1?'s':'');
+  document.getElementById('badge-count').textContent = carteira.length+' ativos';
+ 
+  // Barras composição
+  const bw = document.getElementById('barra-wrap');
+  bw.innerHTML = '';
+  sorted.forEach((a,i) => {
+    const pos = a.atual*a.qtd;
+    const pct = total>0?((pos/total)*100):0;
+    bw.innerHTML += `<div class="bar-row">
+      <span class="bar-name" style="width:76px" title="${a.ticker}">${a.ticker}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${chartColors[i%chartColors.length]}"></div></div>
+      <span class="bar-val">${pct.toFixed(1)}%</span>
+    </div>`;
+  });
+ 
+  // Barras retorno
+  const rw = document.getElementById('retorno-wrap');
+  rw.innerHTML = '';
+  const maxR = Math.max(...sorted.map(a => Math.abs(((a.atual-a.pm)/a.pm)*100)),0.1);
+  sorted.forEach(a => {
+    const ret = ((a.atual-a.pm)/a.pm)*100;
+    const pct = (Math.abs(ret)/maxR)*100;
+    const color = ret>=0?'#107c10':'#d83b01';
+    rw.innerHTML += `<div class="bar-row">
+      <span class="bar-name" style="width:76px" title="${a.ticker}">${a.ticker}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${color}"></div></div>
+      <span class="bar-val" style="color:${color}">${fmtPct(ret)}</span>
+    </div>`;
+  });
+ 
+  // Barras setor
+  const sw = document.getElementById('setor-wrap');
+  sw.innerHTML = '';
+  const setores = {};
+  sorted.forEach(a => {
+    const pos = a.atual*a.qtd;
+    if (!setores[a.setor]) setores[a.setor] = {val:0,count:0};
+    setores[a.setor].val += pos; setores[a.setor].count++;
+  });
+  Object.entries(setores).sort((a,b)=>b[1].val-a[1].val).forEach(([s,v]) => {
+    const pct = total>0?((v.val/total)*100):0;
+    const color = setorColors[s]||'#323130';
+    sw.innerHTML += `<div class="bar-row">
+      <span class="bar-name" style="width:86px" title="${s}">${s}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${color}"></div></div>
+      <span class="bar-val">${pct.toFixed(1)}%</span>
+    </div>`;
+  });
+ 
+  // Barras DY
+  const dyw = document.getElementById('dy-wrap');
+  dyw.innerHTML = '';
+  const maxDY = Math.max(...sorted.map(a=>a.dy||0),0.1);
+  sorted.filter(a=>a.dy>0).sort((a,b)=>b.dy-a.dy).forEach((a,i) => {
+    const pct = (a.dy/maxDY)*100;
+    dyw.innerHTML += `<div class="bar-row">
+      <span class="bar-name" style="width:76px" title="${a.ticker}">${a.ticker}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${chartColors[i%chartColors.length]}"></div></div>
+      <span class="bar-val">${a.dy.toFixed(1)}%</span>
+    </div>`;
+  });
+  if (!sorted.some(a=>a.dy>0)) dyw.innerHTML = '<div class="empty-msg">Sem dados de DY</div>';
+}
+ 
+function adicionarAcao() {
+  const ticker = document.getElementById('inp-ticker').value.trim().toUpperCase();
+  const nome   = document.getElementById('inp-nome').value.trim();
+  const setor  = document.getElementById('inp-setor').value;
+  const pm     = parseFloat(document.getElementById('inp-pm').value.replace(',','.'));
+  const qtd    = parseInt(document.getElementById('inp-qtd').value);
+  const atual  = parseFloat(document.getElementById('inp-atual').value.replace(',','.'));
+  const dy     = parseFloat(document.getElementById('inp-dy').value.replace(',','.'));
+  const msgOk  = document.getElementById('msg-ok');
+  const msgErr = document.getElementById('msg-err');
+ 
+  if (!ticker||!nome||isNaN(pm)||isNaN(qtd)||isNaN(atual)||pm<=0||qtd<=0||atual<=0) {
+    msgErr.style.display='inline'; msgOk.style.display='none';
+    setTimeout(()=>msgErr.style.display='none',2500); return;
   }
-});
+  carteira.push({ticker,nome,setor,pm,qtd,atual,dy:isNaN(dy)?0:dy});
+  ['inp-ticker','inp-nome','inp-pm','inp-qtd','inp-atual','inp-dy'].forEach(id=>document.getElementById(id).value='');
+  msgOk.style.display='inline'; msgErr.style.display='none';
+  setTimeout(()=>msgOk.style.display='none',2000);
+  renderAcoes();
+}
+ 
+function removerAcao(i) {
+  carteira.splice(i,1);
+  renderAcoes();
+}
+ 
+// Init ações ao carregar
+renderAcoes();
 </script>
-</div><!-- fim dashContent -->
+<script>
+/* ══════════════════════════════════════════
+   SISTEMA DE LOGIN — localStorage simulado
+══════════════════════════════════════════ */
+ 
+const DB_KEY = 'findb_users';
+const SESSION_KEY = 'findb_session';
+ 
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY)) || {}; } catch(e) { return {}; }
+}
+function saveUsers(u) { localStorage.setItem(DB_KEY, JSON.stringify(u)); }
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch(e) { return null; }
+}
+function saveSession(s) { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+function clearSession() { localStorage.removeItem(SESSION_KEY); }
+ 
+function initials(name) {
+  return name.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+ 
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
+}
+ 
+/* ── navegação entre painéis ── */
+function showLogin() {
+  document.getElementById('login-panel').style.display = 'block';
+  document.getElementById('register-screen').style.display = 'none';
+  document.getElementById('forgot-screen').style.display = 'none';
+  document.getElementById('login-mode-badge').textContent = 'Login';
+}
+function showRegister() {
+  document.getElementById('login-panel').style.display = 'none';
+  document.getElementById('register-screen').style.display = 'block';
+  document.getElementById('forgot-screen').style.display = 'none';
+  document.getElementById('login-mode-badge').textContent = 'Cadastro';
+}
+function showForgot() {
+  document.getElementById('login-panel').style.display = 'none';
+  document.getElementById('register-screen').style.display = 'none';
+  document.getElementById('forgot-screen').style.display = 'block';
+  document.getElementById('forgot-success').style.display = 'none';
+  document.getElementById('login-mode-badge').textContent = 'Recuperar';
+}
+ 
+/* ── força da senha ── */
+function checkPwStrength(pw) {
+  const fill = document.getElementById('pw-fill');
+  const label = document.getElementById('pw-label');
+  let score = 0;
+  if (pw.length >= 6) score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+  const levels = [
+    {w:'0%', c:'#2e2e50', t:'—'},
+    {w:'20%', c:'#d83b01', t:'Muito fraca'},
+    {w:'40%', c:'#d83b01', t:'Fraca'},
+    {w:'60%', c:'#d4a017', t:'Razoável'},
+    {w:'80%', c:'#107c10', t:'Boa'},
+    {w:'100%', c:'#107c10', t:'Excelente'},
+  ];
+  const l = levels[score] || levels[0];
+  fill.style.width = l.w; fill.style.background = l.c;
+  label.textContent = l.t; label.style.color = l.c;
+}
+ 
+/* ── LOGIN ── */
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('login-pw').value;
+  const btn   = document.getElementById('login-btn');
+ 
+  if (!email || !pw) { showErr('login-err','Preencha e-mail e senha.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('login-err','E-mail inválido.'); return; }
+ 
+  btn.disabled = true; btn.textContent = 'Entrando…';
+ 
+  setTimeout(() => {
+    const users = getUsers();
+ 
+    // Cria conta demo na primeira vez
+    if (!users['demo@email.com']) {
+      users['demo@email.com'] = { nome: 'Usuário Demo', pw: 'demo123' };
+      saveUsers(users);
+    }
+ 
+    if (!users[email]) {
+      showErr('login-err', 'E-mail não encontrado. Crie uma conta.');
+      btn.disabled = false; btn.textContent = 'Entrar'; return;
+    }
+    if (users[email].pw !== pw) {
+      showErr('login-err', 'Senha incorreta. Tente novamente.');
+      btn.disabled = false; btn.textContent = 'Entrar'; return;
+    }
+ 
+    saveSession({ email, nome: users[email].nome });
+    enterDashboard(users[email].nome, email);
+    btn.disabled = false; btn.textContent = 'Entrar';
+  }, 700);
+}
+ 
+/* ── CADASTRO ── */
+function doRegister() {
+  const nome  = document.getElementById('reg-nome').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('reg-pw').value;
+  const pw2   = document.getElementById('reg-pw2').value;
+ 
+  if (!nome || !email || !pw || !pw2) { showErr('reg-err','Preencha todos os campos.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('reg-err','E-mail inválido.'); return; }
+  if (pw.length < 6) { showErr('reg-err','A senha deve ter pelo menos 6 caracteres.'); return; }
+  if (pw !== pw2) { showErr('reg-err','As senhas não coincidem.'); return; }
+ 
+  const users = getUsers();
+  if (users[email]) { showErr('reg-err','Este e-mail já está cadastrado.'); return; }
+ 
+  users[email] = { nome, pw };
+  saveUsers(users);
+  saveSession({ email, nome });
+  enterDashboard(nome, email);
+}
+ 
+/* ── ESQUECI SENHA ── */
+function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showErr('forgot-err','Informe um e-mail válido.'); return;
+  }
+  const users = getUsers();
+  if (!users[email]) { showErr('forgot-err','E-mail não encontrado.'); return; }
+  document.getElementById('forgot-success').style.display = 'block';
+  document.getElementById('forgot-email').value = '';
+}
+ 
+/* ── ENTRAR NO DASHBOARD ── */
+function enterDashboard(nome, email) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-dash').style.display = 'block';
+  document.getElementById('topbar-username').textContent = nome.split(' ')[0];
+  document.getElementById('topbar-avatar').textContent = initials(nome);
+  // inicia charts da aba geral
+  if (!window._geralInit) { window._geralInit = true; }
+  renderAcoes();
+}
+ 
+/* ── LOGOUT ── */
+function doLogout() {
+  clearSession();
+  document.getElementById('main-dash').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-pw').value = '';
+  showLogin();
+}
+ 
+/* ── VERIFICAR SESSÃO AO CARREGAR ── */
+(function checkAutoLogin() {
+  // Garante conta demo existente
+  const users = getUsers();
+  if (!users['demo@email.com']) {
+    users['demo@email.com'] = { nome: 'Usuário Demo', pw: 'demo123' };
+    saveUsers(users);
+  }
+ 
+  const session = getSession();
+  if (session && session.email && session.nome) {
+    enterDashboard(session.nome, session.email);
+  }
+})();
+</script>
+ 
 </body>
 </html>
+ 
