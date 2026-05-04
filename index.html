@@ -1401,4 +1401,27 @@ function doLogout() {
  
 </body>
 </html>
- 
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const supabaseUrl = "SUA_URL_AQUI";
+const supabaseKey = "SUA_CHAVE_AQUI";
+
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+<script>
+async function salvar() {
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+
+  const { data, error } = await supabase
+    .from('usuarios')
+    .insert([{ nome, email }]);
+
+  if (error) {
+    alert("Erro: " + error.message);
+  } else {
+    alert("Salvo com sucesso!");
+  }
+}
+</script>
