@@ -1251,32 +1251,60 @@ input, select, textarea { font-family: inherit; }
 }
 .hamburger-btn:hover { background: var(--bg3); }
 
-/* Mobile dropdown menu */
+/* Mobile lateral menu (drawer) */
 .mobile-menu-overlay {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 190;
-  background: transparent;
+  background: rgba(20,14,5,0.42);
+  opacity: 0;
+  transition: opacity .28s ease;
 }
-.mobile-menu-overlay.open { display: block; }
+.mobile-menu-overlay.open { display: block; opacity: 1; }
 
 .mobile-menu {
   position: fixed;
-  top: 54px;
-  left: 0; right: 0;
+  top: 0; left: 0; bottom: 0;
+  width: 270px;
+  max-width: 80vw;
   z-index: 195;
   background: var(--bg2);
-  border-bottom: 2px solid var(--border2);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
-  transform: translateY(-110%);
+  border-right: 1px solid var(--border2);
+  box-shadow: 6px 0 32px rgba(0,0,0,0.18);
+  transform: translateX(-100%);
   transition: transform .28s cubic-bezier(.4,0,.2,1);
   display: none;
+  overflow-y: auto;
 }
 .mobile-menu.open {
-  transform: translateY(0);
+  transform: translateX(0);
   display: block;
 }
+.mobile-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 16px 0 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.mobile-menu-head .logo { margin: 0; font-size: 16px; }
+.mobile-menu-close {
+  width: 32px; height: 32px;
+  border: none;
+  background: none;
+  color: var(--text2);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.mobile-menu-close:hover { background: var(--bg3); color: var(--text); }
 .mobile-menu-inner {
   display: flex;
   flex-direction: column;
@@ -1313,20 +1341,16 @@ input, select, textarea { font-family: inherit; }
   margin: 6px 20px;
 }
 
-/* Show hamburger on mobile, hide desktop nav-tabs */
+/* Hamburger always visible, nav-tabs removed in favor of sidebar lateral */
+.hamburger-btn { display: flex; }
+.nav-tabs { display: none !important; }
 @media (max-width: 640px) {
-  .hamburger-btn { display: flex; }
-  .nav-tabs { display: none !important; }
   .topnav { padding: 0 14px; gap: 8px; }
   .logo { margin-right: 0; }
   .logo span { display: none; }
   .date-chip { display: none; }
 }
-@media (min-width: 641px) {
-  .hamburger-btn { display: none !important; }
-  .mobile-menu { display: none !important; }
-  .mobile-menu-overlay { display: none !important; }
-}
+
 </style>
 </head>
 <body>
@@ -1738,6 +1762,12 @@ input, select, textarea { font-family: inherit; }
 <!-- ── MOBILE MENU OVERLAY ── -->
 <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-head">
+    <div class="logo"><i class="ti ti-bolt-filled"></i>FitTrack<span>Pro</span></div>
+    <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Fechar menu">
+      <i class="ti ti-x"></i>
+    </button>
+  </div>
   <div class="mobile-menu-inner">
     <button class="mobile-nav-item active" id="mnav-dash" onclick="gotoMobile('dash')">
       <i class="ti ti-layout-dashboard"></i>Dashboard
